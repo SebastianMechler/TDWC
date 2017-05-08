@@ -44,7 +44,6 @@ public:
 	void MoveForward(float a_value);
 	void MoveRight(float a_value);
 	
-
 	void OnRunBegin();
 	void OnRunEnd();
 
