@@ -30,6 +30,25 @@ void AAPlayerController::BeginPlay()
 void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//if (CurrentLookUpValue != 0.0f)
+	//{
+	//	// rotate Camera around Y-Axis
+	//	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+	//	NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CurrentLookUpValue * DeltaTime * 10.0f * LookSpeed, LookUpAngleMin, LookUpAngleMax);
+	//	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+	//	CurrentLookUpValue = 0.0f;
+	//}
+
+	//if (CurrentLookRight != 0.0f)
+	//{
+	//	// rotate camera around Z-Axis
+	//	
+	//	//FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+	//	//NewRotation.Yaw += CurrentLookRight * DeltaTime * 10.0f * LookSpeed;
+	//	//FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+	//	//CurrentLookUpValue = 0.0f;
+	//}
 }
 
 // Called to bind functionality to input
@@ -39,9 +58,12 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AAPlayerController::OnRunBegin);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AAPlayerController::OnRunEnd);
+	PlayerInputComponent->BindAction("LookBack", IE_Pressed, this, &AAPlayerController::OnLookBackBegin);
+	PlayerInputComponent->BindAction("LookBack", IE_Released, this, &AAPlayerController::OnLookBackEnd);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AAPlayerController::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AAPlayerController::MoveRight);
+
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 }
@@ -51,7 +73,7 @@ void AAPlayerController::MoveForward(float a_value)
 	if (a_value != 0.0f)
 	{
 		// add movement in that direction
-		AddMovementInput(GetActorForwardVector(), 100.0f * a_value);
+		AddMovementInput(GetActorForwardVector(), a_value);
 	}
 }
 
@@ -60,7 +82,7 @@ void AAPlayerController::MoveRight(float a_value)
 	if (a_value != 0.0f)
 	{
 		// add movement in that direction
-		AddMovementInput(GetActorRightVector(), 100.0f * a_value);
+		AddMovementInput(GetActorRightVector(), a_value);
 	}
 }
 
@@ -73,6 +95,33 @@ void AAPlayerController::OnRunBegin()
 void AAPlayerController::OnRunEnd()
 {
 	IsRunning = false;
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;	
 }
 
+void AAPlayerController::OnLookBackBegin()
+{
+	FirstPersonCameraComponent->bUsePawnControlRotation = false;
+	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+	NewRotation.Yaw -= 180.0f;
+	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+}
+
+void AAPlayerController::OnLookBackEnd()
+{
+	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+	NewRotation.Yaw += 180.0f;
+	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+}
+
+
+//void AAPlayerController::LookUp(float a_value)
+//{
+//	CurrentLookUpValue = a_value;	
+//}
+//
+//void AAPlayerController::LookRight(float a_value)
+//{
+//	CurrentLookRight = a_value;
+//}

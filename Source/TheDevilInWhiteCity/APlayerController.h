@@ -29,9 +29,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FirstPersonCameraComponent;
 
+	// Normal walking speed
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		float WalkSpeed = 600.0f;
 
+	// Running speed
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		float RunSpeed = 1200.0f;
 
@@ -42,8 +44,30 @@ public:
 	void MoveForward(float a_value);
 	void MoveRight(float a_value);
 	
+
 	void OnRunBegin();
 	void OnRunEnd();
 
-	
+	void OnLookBackBegin();
+	void OnLookBackEnd();
 };
+
+
+//// Camera's rotating speed when moving mouse to look around
+//UPROPERTY(EditAnywhere, Category = "Gameplay")
+//	float LookSpeed = 30.0f;
+
+//// Min Angle when looking down
+//UPROPERTY(EditAnywhere, Category = "Gameplay")
+//	float LookUpAngleMin = -80.0f;
+
+//// Max angle when looking up
+//UPROPERTY(EditAnywhere, Category = "Gameplay")
+//	float LookUpAngleMax = -45.0f;
+
+//void LookUp(float a_value);
+//void LookRight(float a_value);
+
+//private:
+//float CurrentLookUpValue = 0.0f;
+//float CurrentLookRight = 0.0f;
