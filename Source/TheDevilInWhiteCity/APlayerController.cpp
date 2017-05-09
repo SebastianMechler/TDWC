@@ -64,13 +64,13 @@ void AAPlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveForward", this, &AAPlayerController::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AAPlayerController::MoveRight);
 
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Turn", this, &AAPlayerController::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &AAPlayerController::LookUp);
 }
 
 void AAPlayerController::MoveForward(float a_value)
 {
-	if (a_value != 0.0f)
+	if (!IsPaused && a_value != 0.0f)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), a_value);
@@ -79,49 +79,71 @@ void AAPlayerController::MoveForward(float a_value)
 
 void AAPlayerController::MoveRight(float a_value)
 {
-	if (a_value != 0.0f)
+	if (!IsPaused && a_value != 0.0f)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), a_value);
 	}
 }
 
+void AAPlayerController::LookUp(float a_value)
+{
+	if (!IsPaused)
+	{
+		this->AddControllerPitchInput(a_value);
+	}
+}
+
+void AAPlayerController::Turn(float a_value)
+{
+	if (!IsPaused)
+	{
+		this->AddControllerYawInput(a_value);
+	}
+}
+
 void AAPlayerController::OnRunBegin()
 {
-	IsRunning = true;
-	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	if (!IsPaused)
+	{
+		IsRunning = true;
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	}
 }
 
 void AAPlayerController::OnRunEnd()
 {
-	IsRunning = false;
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;	
+	if (!IsPaused)
+	{
+		IsRunning = false;
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
 }
 
 void AAPlayerController::OnLookBackBegin()
 {
-	FirstPersonCameraComponent->bUsePawnControlRotation = false;
-	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
-	NewRotation.Yaw -= 180.0f;
-	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+	if (!IsPaused)
+	{
+		FirstPersonCameraComponent->bUsePawnControlRotation = false;
+		FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+		NewRotation.Yaw -= 180.0f;
+		FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+	}
 }
 
 void AAPlayerController::OnLookBackEnd()
 {
-	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
-	NewRotation.Yaw += 180.0f;
-	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+	if (!IsPaused)
+	{
+		FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+		NewRotation.Yaw += 180.0f;
+		FirstPersonCameraComponent->SetWorldRotation(NewRotation);
 
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+		FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	}
 }
 
-
-//void AAPlayerController::LookUp(float a_value)
-//{
-//	CurrentLookUpValue = a_value;	
-//}
-//
-//void AAPlayerController::LookRight(float a_value)
-//{
-//	CurrentLookRight = a_value;
-//}
+void AAPlayerController::SetPaused(bool isPaused)
+{
+	this->IsPaused = isPaused;
+}

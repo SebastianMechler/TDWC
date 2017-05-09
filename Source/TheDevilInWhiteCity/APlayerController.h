@@ -43,12 +43,20 @@ public:
 
 	void MoveForward(float a_value);
 	void MoveRight(float a_value);
+
+	void LookUp(float a_value);
+	void Turn(float a_value);
 	
 	void OnRunBegin();
 	void OnRunEnd();
 
 	void OnLookBackBegin();
 	void OnLookBackEnd();
+
+	void SetPaused(bool isPaused);
+
+private:
+	bool IsPaused = false;
 };
 
 
