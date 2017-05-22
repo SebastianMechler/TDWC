@@ -142,8 +142,8 @@ void AAPlayerController::HandleFootstep(float a_deltaTime)
 
 	// get distance player traveled each frame
 	float distanceTraveledPerFrame = FVector::Distance(GetActorLocation(), LastFramePosition);
-
-	// do not allow teleport as footstep (cap distance)
+	
+	// no footstep on teleport
 	if (distanceTraveledPerFrame >= 100.0f)
 	{
 		distanceTraveledPerFrame = 0.0f;
@@ -164,7 +164,8 @@ void AAPlayerController::HandleFootstep(float a_deltaTime)
 	LastFramePosition = GetActorLocation();
 
 	// check if player traveled enough space in order to play a footstep sound
-	if (CurrentMovement * a_deltaTime >= FootstepDistance)
+	//if (CurrentMovement * a_deltaTime >= FootstepDistance)
+	if (CurrentMovement >= FootstepDistance)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[HandleFootstep] playing sound..."));
 

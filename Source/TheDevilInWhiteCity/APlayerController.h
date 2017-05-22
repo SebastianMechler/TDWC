@@ -49,7 +49,7 @@ public:
 	float FootstepDistance = 2.0f; // distance the player travels in world to play new sound
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		float FootstepRunModifier = 0.8f; // modifier to increase/decrease the speed a footstep will be played when running
+	float FootstepRunModifier = 0.8f; // modifier to increase/decrease the speed a footstep will be played when running
 
 	void MoveForward(float a_value);
 	void MoveRight(float a_value);
