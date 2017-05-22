@@ -41,6 +41,16 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Gameplay")
 	bool IsRunning = false;
 
+	// Array for footstep sounds	
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	TArray<USoundBase*> FootstepMap;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	float FootstepDistance = 2.0f; // distance the player travels in world to play new sound
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		float FootstepRunModifier = 0.8f; // modifier to increase/decrease the speed a footstep will be played when running
+
 	void MoveForward(float a_value);
 	void MoveRight(float a_value);
 
@@ -55,8 +65,12 @@ public:
 
 	void SetPaused(bool isPaused);
 
+	void HandleFootstep(float a_deltaTime);
 private:
 	bool IsPaused = false;
+	float CurrentMovement = 0.0f;
+	int32_t CurrentFootstepIndex = 0;
+	FVector LastFramePosition = FVector(0.0f, 0.0f, 0.0f);
 };
 
 

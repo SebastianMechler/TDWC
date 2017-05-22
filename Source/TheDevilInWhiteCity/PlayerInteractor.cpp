@@ -16,7 +16,7 @@ void UPlayerInteractor::BeginPlay()
 
 	// Get Pointer to Player's Camera
 	AActor* owner = this->GetOwner();
-
+	
 	if (owner)
 	{
 		// bind action
@@ -61,7 +61,9 @@ void UPlayerInteractor::PerformInteraction()
 		if (CurrentInteractionState == EInteractionState::InView)
 		{
 			// player cancelled interaction
+#ifdef UE_BUILD_DEBUG
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] player is done..."));
+#endif
 			// TODO: add object to inventory
 			this->PlayerController->SetPaused(false);
 			this->GetWorld()->DestroyActor(CurrentInteractionObject);
@@ -78,7 +80,9 @@ void UPlayerInteractor::PerformInteraction()
 	if (!this->PlayerCamera)
 	{
 		// No Camera is set
+#ifdef UE_BUILD_DEBUG
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("UPlayerInteractor::PerformInteraction => NO PLAYER CAMERA"));
+#endif
 		return;
 	}
 

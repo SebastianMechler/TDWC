@@ -2,6 +2,7 @@
 
 #include "TheDevilInWhiteCity.h"
 #include "APlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -31,24 +32,7 @@ void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if (CurrentLookUpValue != 0.0f)
-	//{
-	//	// rotate Camera around Y-Axis
-	//	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
-	//	NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CurrentLookUpValue * DeltaTime * 10.0f * LookSpeed, LookUpAngleMin, LookUpAngleMax);
-	//	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
-	//	CurrentLookUpValue = 0.0f;
-	//}
-
-	//if (CurrentLookRight != 0.0f)
-	//{
-	//	// rotate camera around Z-Axis
-	//	
-	//	//FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
-	//	//NewRotation.Yaw += CurrentLookRight * DeltaTime * 10.0f * LookSpeed;
-	//	//FirstPersonCameraComponent->SetWorldRotation(NewRotation);
-	//	//CurrentLookUpValue = 0.0f;
-	//}
+	HandleFootstep(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -147,3 +131,102 @@ void AAPlayerController::SetPaused(bool isPaused)
 {
 	this->IsPaused = isPaused;
 }
+
+void AAPlayerController::HandleFootstep(float a_deltaTime)
+{
+	// dont play any sound if no sounds are available
+	if (FootstepMap.Num() == 0)
+	{
+		return;
+	}
+
+	// get distance player traveled each frame
+	float distanceTraveledPerFrame = FVector::Distance(GetActorLocation(), LastFramePosition);
+
+	// do not allow teleport as footstep (cap distance)
+	if (distanceTraveledPerFrame >= 100.0f)
+	{
+		distanceTraveledPerFrame = 0.0f;
+	}
+
+	if (IsRunning)
+	{
+		// Update travel distance (running can be modified by scalar)
+		CurrentMovement += distanceTraveledPerFrame * FootstepRunModifier;
+	}
+	else
+	{
+		// Update travel distance
+		CurrentMovement += distanceTraveledPerFrame;
+	}
+
+	
+	LastFramePosition = GetActorLocation();
+
+	// check if player traveled enough space in order to play a footstep sound
+	if (CurrentMovement * a_deltaTime >= FootstepDistance)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[HandleFootstep] playing sound..."));
+
+		// play sound at location
+		UWorld* world = GetWorld();
+		if (!world)
+		{
+			return;
+		}
+
+		// get random sound from array
+		auto idx = FMath::RandRange(0, FootstepMap.Num()-1); // 0-MAX-1 in array
+
+		// Debugging
+		//char text[100]{};
+		//snprintf(text, sizeof(text), "Generated number: %d", idx);
+		//FString x = text;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, x);
+
+		USoundBase* soundToPlay = FootstepMap[idx];
+
+		// play footstep sound
+		if (soundToPlay)
+		{
+			UGameplayStatics::PlaySoundAtLocation(world, soundToPlay, GetActorLocation());
+		}
+
+		// reset movement distance
+		CurrentMovement = 0.0f;
+
+		// increase footstep index
+		CurrentFootstepIndex++;
+		if (CurrentFootstepIndex >= FootstepMap.Num())
+		{
+			CurrentFootstepIndex = 0;
+		}
+	}
+	else
+	{
+		// Debugging
+		//char text[100]{};
+		//snprintf(text, sizeof(text), "FLOAT: %f", CurrentMovement * a_deltaTime);
+		//FString x = text;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, x);
+	}
+}
+
+//if (CurrentLookUpValue != 0.0f)
+//{
+//	// rotate Camera around Y-Axis
+//	FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+//	NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CurrentLookUpValue * DeltaTime * 10.0f * LookSpeed, LookUpAngleMin, LookUpAngleMax);
+//	FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+//	CurrentLookUpValue = 0.0f;
+//}
+
+//if (CurrentLookRight != 0.0f)
+//{
+//	// rotate camera around Z-Axis
+//	
+//	//FRotator NewRotation = FirstPersonCameraComponent->GetComponentRotation();
+//	//NewRotation.Yaw += CurrentLookRight * DeltaTime * 10.0f * LookSpeed;
+//	//FirstPersonCameraComponent->SetWorldRotation(NewRotation);
+//	//CurrentLookUpValue = 0.0f;
+//}
