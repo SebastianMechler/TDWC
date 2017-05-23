@@ -66,7 +66,10 @@ void UPlayerInteractor::PerformInteraction()
 #endif
 			// TODO: add object to inventory
 			this->PlayerController->SetPaused(false);
-			this->GetWorld()->DestroyActor(CurrentInteractionObject);
+			//this->GetWorld()->DestroyActor(CurrentInteractionObject);
+			IInterface_Interactable* base = Cast<IInterface_Interactable>(this->CurrentInteractionObject);
+			base->OnViewSpace(GetOwner());
+
 			CurrentInteractionState = EInteractionState::None;
 			CurrentInteractionObject = nullptr;
 			return;

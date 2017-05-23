@@ -15,7 +15,7 @@ AInteractableExample::AInteractableExample()
 // Called when the game starts or when spawned
 void AInteractableExample::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();	
 	
 }
 
@@ -40,4 +40,9 @@ void AInteractableExample::Interact(AActor* a_player)
 EInteractionType AInteractableExample::GetInteractionType()
 {
 	return EInteractionType::World;
+}
+
+void AInteractableExample::OnViewSpace(AActor* a_player)
+{
+
 }

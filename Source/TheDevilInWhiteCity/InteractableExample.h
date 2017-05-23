@@ -22,5 +22,6 @@ public:
 
 	void Interact(AActor* a_player) override; // EXAMPLE ==> implement interface function
 	EInteractionType GetInteractionType() override; // EXAMPLE ==> implement interface function
+	void OnViewSpace(AActor* a_player) override;
 	
 };

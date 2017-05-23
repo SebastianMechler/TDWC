@@ -25,4 +25,13 @@ public:
 
 	void Interact(AActor* a_player) override; // EXAMPLE ==> implement interface function
 	EInteractionType GetInteractionType() override; // EXAMPLE ==> implement interface function
+	void OnViewSpace(AActor* a_player) override;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		float DrinkSpeed = 0.5f;
+private:
+	bool Started = false;
+	FRotator StartRotation;
+	FRotator EndRotation;
+	float interpollationTime = 0.0f;
 };

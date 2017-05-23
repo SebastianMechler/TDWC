@@ -22,4 +22,5 @@ public:
 	
 	virtual void Interact(AActor* a_player) = 0;
 	virtual EInteractionType GetInteractionType() = 0;
+	virtual void OnViewSpace(AActor* a_player) = 0;
 };
