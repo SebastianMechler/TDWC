@@ -114,6 +114,13 @@ void UPlayerInteractor::PerformInteraction()
 				this->CurrentInteractionMoveDirection = CurrentInteractionViewPoint - result.GetActor()->GetActorLocation();
 				this->CurrentInteractionMoveDirection.Normalize();
 
+				this->CurrentInteractionObjectMaxDistance = FVector::Distance(CurrentInteractionViewPoint, CurrentInteractionObject->GetActorLocation());
+				this->CurrentInteractionObjectMaxDistance -= this->MaxViewDistance;
+
+				// start and end rotation
+				this->StartRotation = result.GetActor()->GetActorRotation();
+				this->EndRotation = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
+
 				this->PlayerController->SetPaused(true);
 				break;
 
@@ -134,14 +141,24 @@ void UPlayerInteractor::ProjectToView(float DeltaTime)
 		return;
 	}
 
+	// MaxDistance = 50.0f == 100% - 10.0f
+	// CurrentDistance = 40.0f == x == 1 - 0.8f == 0.2f
+	// CurrentDistance = 30.0f == x == 1 - 0.6f == 0.4f
+	// CurrentDistance = 10.0f == x == 1 - 0.2f == 0.8f
+	// 0.0f - 1.0f
+
+	// FMath::Lerp(StartRotation, EndRotation, 1.0f - CurrentDistance / MaxDistance);
+
 	float distance = FVector::Distance(CurrentInteractionViewPoint, CurrentInteractionObject->GetActorLocation());
-	if (distance < 10.0f)
+	if (distance < this->MaxViewDistance)
 	{
 		// object reached camera view point
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] object in view..."));
 
-		auto PlayerRot = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
-		this->CurrentInteractionObject->SetActorRotation(PlayerRot);
+		//auto PlayerRot = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
+		//this->CurrentInteractionObject->SetActorRotation(PlayerRot);
+
+		this->CurrentInteractionObject->SetActorRotation(EndRotation);
 
 		CurrentInteractionState = EInteractionState::InView;
 	}
@@ -151,6 +168,9 @@ void UPlayerInteractor::ProjectToView(float DeltaTime)
 		auto location = CurrentInteractionObject->GetActorLocation();
 		location += CurrentInteractionMoveDirection * InteractionViewProjectSpeed * DeltaTime;
 		CurrentInteractionObject->SetActorLocation(location);
+
+		auto newRotation = FMath::Lerp(StartRotation, EndRotation, 1.0f - distance / this->CurrentInteractionObjectMaxDistance);
+		this->CurrentInteractionObject->SetActorRotation(newRotation);
 	}
 }
 
