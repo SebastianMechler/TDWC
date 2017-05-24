@@ -36,6 +36,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 	float openSpeed = 2.f;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* OpenSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* CloseSound = nullptr;
+
 	void Interact(AActor* a_player) override;
 	EInteractionType GetInteractionType() override;
 	void OnViewSpace(AActor* a_player) override;

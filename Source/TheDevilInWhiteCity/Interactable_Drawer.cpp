@@ -2,6 +2,7 @@
 
 #include "TheDevilInWhiteCity.h"
 #include "Interactable_Drawer.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -65,17 +66,23 @@ void AInteractable_Drawer::Interact(AActor * a_player)
 	{
 		endVector = startVector + headFowardVector * openDistance;
 		isOpen = true;
+		if (OpenSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+		}
 	}
 	else
 	{
 		endVector = startVector - headFowardVector * openDistance;
 		isOpen = false;
+		if (CloseSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, CloseSound, GetActorLocation());
+		}
 	}
 
 	lerpTime = 0.0f;
 	interacted = true; 
-
-
 	
 }
 
