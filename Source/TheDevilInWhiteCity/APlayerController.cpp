@@ -4,6 +4,8 @@
 #include "APlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "PlayerInteractor.h"
+
 
 // Sets default values
 AAPlayerController::AAPlayerController()
@@ -19,6 +21,8 @@ AAPlayerController::AAPlayerController()
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+
 }
 
 // Called when the game starts or when spawned
@@ -31,7 +35,6 @@ void AAPlayerController::BeginPlay()
 void AAPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	HandleFootstep(DeltaTime);
 }
 

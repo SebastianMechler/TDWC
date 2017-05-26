@@ -56,6 +56,11 @@ void UPlayerInteractor::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 void UPlayerInteractor::PerformInteraction()
 {
+	if (!isEnabled)
+	{
+		return;
+	}
+
 	if (CurrentInteractionState != EInteractionState::None)
 	{
 		if (CurrentInteractionState == EInteractionState::InView)
@@ -108,23 +113,33 @@ void UPlayerInteractor::PerformInteraction()
 		{
 			switch (base->GetInteractionType())
 			{
-			case EInteractionType::View:
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] started..."));
-				this->CurrentInteractionState = EInteractionState::ProjectToView;
-				this->CurrentInteractionObject = result.GetActor();
-				this->CurrentInteractionViewPoint = this->PlayerCamera->GetComponentLocation() + InteractionViewPointDistance * this->PlayerCamera->GetForwardVector();
-				
-				this->CurrentInteractionMoveDirection = CurrentInteractionViewPoint - result.GetActor()->GetActorLocation();
-				this->CurrentInteractionMoveDirection.Normalize();
+				case EInteractionType::View:
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] started..."));
+					this->CurrentInteractionState = EInteractionState::ProjectToView;
+					this->CurrentInteractionObject = result.GetActor();
+					this->CurrentInteractionViewPoint = this->PlayerCamera->GetComponentLocation() + InteractionViewPointDistance * this->PlayerCamera->GetForwardVector();
 
-				this->CurrentInteractionObjectMaxDistance = FVector::Distance(CurrentInteractionViewPoint, CurrentInteractionObject->GetActorLocation());
-				this->CurrentInteractionObjectMaxDistance -= this->MaxViewDistance;
+					this->CurrentInteractionMoveDirection = CurrentInteractionViewPoint - result.GetActor()->GetActorLocation();
+					this->CurrentInteractionMoveDirection.Normalize();
 
-				// start and end rotation
-				this->StartRotation = result.GetActor()->GetActorRotation();
-				this->EndRotation = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
+					this->CurrentInteractionObjectMaxDistance = FVector::Distance(CurrentInteractionViewPoint, CurrentInteractionObject->GetActorLocation());
+					this->CurrentInteractionObjectMaxDistance -= this->MaxViewDistance;
 
-				this->PlayerController->SetPaused(true);
+					// start and end rotation
+					this->StartRotation = result.GetActor()->GetActorRotation();
+					this->EndRotation = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
+
+					// disable gravity and collision
+					auto meshComponent = result.GetActor()->FindComponentByClass<UStaticMeshComponent>();
+					if (meshComponent)
+					{
+						meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+						meshComponent->SetEnableGravity(false);
+					}
+
+					this->PlayerController->SetPaused(true);
+				}
 				break;
 
 			case EInteractionType::World:

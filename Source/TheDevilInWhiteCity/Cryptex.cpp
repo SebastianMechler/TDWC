@@ -3,6 +3,7 @@
 #include "TheDevilInWhiteCity.h"
 #include "Cryptex.h"
 #include "Kismet/KismetStringLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -155,7 +156,18 @@ void ACryptex::TryToSolveCryptex()
 		for (auto i = 0; i < 4; i++)
 		{
 			this->TextNumbers[i]->SetTextRenderColor(FColor::Green);
+
+			if (this->OpenSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, this->OpenSound, GetActorLocation());
+			}
+
 			// TODO: call door script...
+			if (DoorToOpen)
+			{
+				DoorToOpen->SetLockState(false);
+			}
+
 		}
 
 		this->IsSolved = true;

@@ -51,4 +51,6 @@ public:
 	float MaxViewDistance = 10.0f;
 	FRotator StartRotation;
 	FRotator EndRotation;
+
+	bool isEnabled = true;
 };

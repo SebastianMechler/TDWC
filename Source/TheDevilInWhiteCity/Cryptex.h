@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "CryptexArrowType.h"
+#include "Interactable_Door.h"
 #include "Cryptex.generated.h"
 
 UCLASS()
@@ -52,6 +53,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 	UTextRenderComponent* TextNumbers[4];
 	
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	AInteractable_Door* DoorToOpen = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* OpenSound = nullptr;
+
 private:
 	bool IsSolved = false;
 
