@@ -57,6 +57,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* GasEnds = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* HorseSoundStarts = nullptr;
+
 		//class UParticleSystemComponent* PSC;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")

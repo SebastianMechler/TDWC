@@ -107,11 +107,19 @@ void ACryptex::UpdateCryptex(ECryptexArrowType a_type, int a_index)
 	case ECryptexArrowType::Up:
 		value++;
 		// change number up
+		if(InteractSoundUp)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->InteractSoundUp, GetActorLocation());
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("UP"));
 		break;
 	case ECryptexArrowType::Down:
 		// change number down
 		value--;
+		if (InteractSoundDown)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->InteractSoundDown, GetActorLocation());
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Down"));
 		break;
 	default:

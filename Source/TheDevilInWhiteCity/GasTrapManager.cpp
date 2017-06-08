@@ -91,6 +91,10 @@ void AGasTrapManager::OnTriggerEnter(UPrimitiveComponent * HitComp, AActor * Oth
 
 		this->timer = 0.0f;
 
+		if (this->HorseSoundStarts)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, HorseSoundStarts, GetActorLocation(), 0.5f);
+		}
 		// set spawn position
 		if(this->GasParticle)
 		{

@@ -42,5 +42,5 @@ public:
 
 	float timer = -1.0f;
 	bool isHidden = false;
-	//bool isFirst = true;
+	bool PlayedAllready = false;
 };

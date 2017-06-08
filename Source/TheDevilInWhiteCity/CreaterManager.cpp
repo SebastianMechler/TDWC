@@ -91,7 +91,11 @@ void ACreaterManager::Tick(float DeltaTime)
 
 				if (this->Player && this->CreaterShows)
 				{
-					UGameplayStatics::PlaySoundAtLocation(this, this->CreaterShows, this->Player->GetActorLocation());
+					if(!PlayedAllready)
+					{
+						UGameplayStatics::PlaySoundAtLocation(this, this->CreaterShows, this->Player->GetActorLocation());
+						this->PlayedAllready = true;
+					}
 				}
 
 				auto meshComponent = e->FindComponentByClass<UStaticMeshComponent>();

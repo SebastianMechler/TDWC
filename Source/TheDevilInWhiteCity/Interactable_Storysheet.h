@@ -31,4 +31,5 @@ private:
 	FVector OriginalLocation = FVector(0.0f, 0.0f, 0.0f);
 	FRotator OriginalRotation;
 
+
 };

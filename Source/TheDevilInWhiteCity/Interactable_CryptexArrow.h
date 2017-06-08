@@ -36,6 +36,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		int index = 0; // index of cryptex (ranges from 0 to 3 ==> 4 numbers)
 
+
 private:
 	ACryptex* RootCryptex = nullptr;
 };

@@ -59,6 +59,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* OpenSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* InteractSoundUp = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* InteractSoundDown = nullptr;
+
 private:
 	bool IsSolved = false;
 
