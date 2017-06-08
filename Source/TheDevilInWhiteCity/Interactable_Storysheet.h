@@ -27,4 +27,8 @@ public:
 	EInteractionType GetInteractionType() override; // EXAMPLE ==> implement interface function
 	void OnViewSpace(AActor* a_player) override;
 	
+private:
+	FVector OriginalLocation = FVector(0.0f, 0.0f, 0.0f);
+	FRotator OriginalRotation;
+
 };

@@ -7,3 +7,4 @@ UInterface_Interactable::UInterface_Interactable(const FObjectInitializer& Objec
 	: Super(ObjectInitializer)
 {
 }
+

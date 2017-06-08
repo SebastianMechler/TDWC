@@ -46,7 +46,7 @@ void AInteractable_Drawer::Tick(float DeltaTime)
 
 void AInteractable_Drawer::Interact(AActor * a_player)
 {
-
+	//auto headscale = this->GetParentActor()->GetActorTransform().GetScale3D()
 	auto head = this->GetAttachParentActor();
 
 	if(head == nullptr)
@@ -94,3 +94,5 @@ void AInteractable_Drawer::OnViewSpace(AActor* a_player)
 {
 
 }
+
+

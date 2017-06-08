@@ -73,10 +73,13 @@ void UPlayerInteractor::PerformInteraction()
 			this->PlayerController->SetPaused(false);
 			IInterface_Interactable* base = Cast<IInterface_Interactable>(this->CurrentInteractionObject);
 			base->OnViewSpace(GetOwner());
-			//if (base->OnViewSpace(GetOwner()) == EDestroy)
-			//{
-				//this->GetWorld()->DestroyActor(CurrentInteractionObject);
-			//}
+
+			auto meshComponent = CurrentInteractionObject->FindComponentByClass<UStaticMeshComponent>();
+			if (meshComponent)
+			{
+				meshComponent->SetCollisionEnabled(this->CollisionState);
+				meshComponent->SetEnableGravity(true);
+			}
 
 			CurrentInteractionState = EInteractionState::None;
 			CurrentInteractionObject = nullptr;
@@ -103,7 +106,7 @@ void UPlayerInteractor::PerformInteraction()
 	FVector EndTrace = (Direction * PickupDistance) + StartTrace;
 
 	UWorld* World = GetWorld();
-	DrawDebugLine(World, StartTrace, EndTrace, FColor::Red, true);
+	//DrawDebugLine(World, StartTrace, EndTrace, FColor::Red, true);
 
 	if (World && World->LineTraceSingleByChannel(result, StartTrace, EndTrace, ECollisionChannel::ECC_Visibility))
 	{
@@ -130,10 +133,15 @@ void UPlayerInteractor::PerformInteraction()
 					this->StartRotation = result.GetActor()->GetActorRotation();
 					this->EndRotation = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
 
+					
+
 					// disable gravity and collision
 					auto meshComponent = result.GetActor()->FindComponentByClass<UStaticMeshComponent>();
 					if (meshComponent)
 					{
+						// save collisionstate
+						this->CollisionState = meshComponent->GetCollisionEnabled();
+
 						meshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 						meshComponent->SetEnableGravity(false);
 					}

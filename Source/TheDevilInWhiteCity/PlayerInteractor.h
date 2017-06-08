@@ -48,9 +48,11 @@ public:
 	float InteractionViewPointDistance = 100.0f; // distance which defines the point infront of the camera where the object moves to
 	float InteractionViewProjectSpeed = 300.0f; // speed in which the object moves to the camera
 	float CurrentInteractionObjectMaxDistance = 0.0f;
-	float MaxViewDistance = 10.0f;
+	float MaxViewDistance = 5.0f;
 	FRotator StartRotation;
 	FRotator EndRotation;
 
 	bool isEnabled = true;
+
+	ECollisionEnabled::Type CollisionState;
 };

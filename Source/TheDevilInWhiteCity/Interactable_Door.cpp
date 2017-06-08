@@ -105,6 +105,7 @@ void AInteractable_Door::OnViewSpace(AActor* a_player)
 
 }
 
+
 void AInteractable_Door::SetLockState(bool a_state)
 {
 	this->isLocked = a_state;

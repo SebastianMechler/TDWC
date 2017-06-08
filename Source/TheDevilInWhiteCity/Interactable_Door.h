@@ -50,5 +50,4 @@ public:
 	void OnViewSpace(AActor* a_player) override;
 
 
-
 };

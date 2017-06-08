@@ -54,3 +54,4 @@ void AInteractable_CryptexArrow::OnViewSpace(AActor* a_player)
 {
 
 }
+

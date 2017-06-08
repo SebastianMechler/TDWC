@@ -46,3 +46,4 @@ void AInteractableExample::OnViewSpace(AActor* a_player)
 {
 
 }
+

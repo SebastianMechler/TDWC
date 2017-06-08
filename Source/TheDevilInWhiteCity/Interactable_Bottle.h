@@ -26,6 +26,7 @@ public:
 	void Interact(AActor* a_player) override; // EXAMPLE ==> implement interface function
 	EInteractionType GetInteractionType() override; // EXAMPLE ==> implement interface function
 	void OnViewSpace(AActor* a_player) override;
+	AActor* GetParentActorPosition();
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		float DrinkSpeed = 1.5f; // value which determines how fast the player will drink the bottle (1.5f is good here)

@@ -29,6 +29,8 @@ AAPlayerController::AAPlayerController()
 void AAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCharacterMovement()->MaxWalkSpeed = this->WalkSpeed;
 }
 
 // Called every frame

@@ -86,3 +86,5 @@ void AInteractableExample2::OnViewSpace(AActor* a_player)
 
 	//World->DestroyActor(Owner);
 }
+
+
