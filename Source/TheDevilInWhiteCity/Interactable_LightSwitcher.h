@@ -63,7 +63,7 @@ public:
 	
 
 private:
-	TArray<UPointLightComponent*> PointLightComponents;
+	TArray<ULightComponent*> PointLightComponents;
 
 
 	float FlickerTimer = -1.0f;
