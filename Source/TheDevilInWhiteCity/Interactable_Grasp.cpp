@@ -73,7 +73,9 @@ void AInteractable_Grasp::OnViewSpace(AActor * a_player)
 				heater->SetInteract(true);
 			}
 		}
-		staticMeshComponent->SetVisibility(false);
+		//staticMeshComponent->SetVisibility(false);
+		
+		this->SetActorHiddenInGame(true);
 	}
 }
 

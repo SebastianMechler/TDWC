@@ -10,10 +10,6 @@ AInteractable_Door::AInteractable_Door()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	// start rotation
-	this->startVector = GetActorRotation();
-
 }
 
 // Called when the game starts or when spawned
@@ -21,6 +17,8 @@ void AInteractable_Door::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// start rotation
+	this->startVector = GetActorRotation();
 }
 
 // Called every frame
@@ -50,7 +48,12 @@ void AInteractable_Door::Tick(float DeltaTime)
 
 	if (lerpTime > 1.0f)
 	{
-		interacted = false;
+			interacted = false;
+
+			if (this->isSlammed)
+			{
+				this->isLocked = true;
+			}
 	}
 }
 
@@ -71,23 +74,45 @@ void AInteractable_Door::Interact(AActor * a_player)
 	{
 		// get end rotation for opening
 		FRotator tmp = startVector;
-		tmp.Yaw += 90.0f;
+		tmp.Yaw += this->rotationAngleZ;
 		this->endVector = tmp;
 
 		isOpen = true;
-		if (OpenSound)
+
+		if (this->isSlammed)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+			if (this->SlamDoorSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, SlamDoorSound, GetActorLocation());
+			}
 		}
+		else
+		{
+			if (OpenSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+			}
+		}
+		
 	}
 	else
 	{
 		this->endVector = GetActorRotation();
 
 		isOpen = false;
-		if (CloseSound)
+		if (this->isSlammed)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, CloseSound, GetActorLocation());
+			if (this->SlamDoorSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, SlamDoorSound, GetActorLocation());
+			}
+		}
+		else
+		{
+			if (OpenSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
+			}
 		}
 	}
 
@@ -109,4 +134,11 @@ void AInteractable_Door::OnViewSpace(AActor* a_player)
 void AInteractable_Door::SetLockState(bool a_state)
 {
 	this->isLocked = a_state;
+}
+
+void AInteractable_Door::SlamDoor()
+{
+	this->isLocked = false;
+	this->isSlammed = true;
+	this->Interact(nullptr);
 }

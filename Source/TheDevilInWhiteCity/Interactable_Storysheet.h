@@ -27,6 +27,11 @@ public:
 	EInteractionType GetInteractionType() override; // EXAMPLE ==> implement interface function
 	void OnViewSpace(AActor* a_player) override;
 	
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* InteractionSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* TalkSound = nullptr;
 private:
 	FVector OriginalLocation = FVector(0.0f, 0.0f, 0.0f);
 	FRotator OriginalRotation;

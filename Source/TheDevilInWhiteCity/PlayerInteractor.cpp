@@ -131,9 +131,9 @@ void UPlayerInteractor::PerformInteraction()
 
 					// start and end rotation
 					this->StartRotation = result.GetActor()->GetActorRotation();
-					this->EndRotation = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
-
-					
+					FVector vec = this->PlayerCamera->GetComponentLocation() - this->CurrentInteractionObject->GetActorLocation();
+					vec.Normalize();
+					this->EndRotation = FRotationMatrix::MakeFromZ(vec).Rotator();
 
 					// disable gravity and collision
 					auto meshComponent = result.GetActor()->FindComponentByClass<UStaticMeshComponent>();

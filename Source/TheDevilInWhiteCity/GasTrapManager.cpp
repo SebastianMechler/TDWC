@@ -26,12 +26,7 @@ void AGasTrapManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto comp = this->GetComponentByClass(UAudioComponent::StaticClass());
-	if (comp)
-	{
-		this->GasLeak = reinterpret_cast<UAudioComponent*>(comp);
-	}
-
+	this->SetAudioPlay(false);
 
 	if (this->Gas)
 	{
@@ -75,9 +70,22 @@ void AGasTrapManager::Tick(float DeltaTime)
 				UGameplayStatics::PlaySoundAtLocation(this, GasEnds, GetActorLocation());
 			}
 		}
-
 	}
 
+	if(deathTimer >= 0.0f)
+	{
+		this->deathTimer += DeltaTime;
+
+		if(deathTimer >= 60.0f)
+		{
+			deathTimer = -1.0f;
+
+			// stop sounds
+			this->SetAudioPlay(false);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You are dead!"));
+		}
+	}
 }
 
 void AGasTrapManager::OnTriggerEnter(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -90,11 +98,31 @@ void AGasTrapManager::OnTriggerEnter(UPrimitiveComponent * HitComp, AActor * Oth
 		isDone = true;
 
 		this->timer = 0.0f;
+		this->deathTimer = 0.0f;
 
-		if (this->HorseSoundStarts)
+		// Get StaticMeshComponent
+		if (this->Grasp && this->GraspSpawnTo)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, HorseSoundStarts, GetActorLocation(), 0.5f);
+			auto meshComponent = this->Grasp->GetComponentByClass(UStaticMeshComponent::StaticClass());
+
+			if (meshComponent)
+			{
+				auto meshCmp = reinterpret_cast<UStaticMeshComponent*>(meshComponent);
+				if (meshCmp)
+				{
+					meshCmp->SetSimulatePhysics(true);
+					meshCmp->SetEnableGravity(true);
+					// calculate direction vector
+
+					FVector direction = this->GraspSpawnTo->GetActorLocation() - this->Grasp->GetActorLocation();
+					direction.Normalize();
+
+					meshCmp->AddForce(direction * meshCmp->GetBodyInstance()->GetBodyMass() * ExplosionForce);
+					
+				}
+			}
 		}
+
 		// set spawn position
 		if(this->GasParticle)
 		{
@@ -107,16 +135,10 @@ void AGasTrapManager::OnTriggerEnter(UPrimitiveComponent * HitComp, AActor * Oth
 			this->MistParticle->SetVisibility(true);
 			this->MistParticle->ActivateSystem();
 		}
-
-		//if(this->GasStarts)
-		//{
-		//	//UGameplayStatics::PlaySoundAtLocation(this, GasStarts, GetActorLocation());
-		//}
 		
-		if (this->GasLeak)
-		{
-			this->GasLeak->Play();
-		}
+		// play all attached audio component sounds
+		this->SetAudioPlay(true);
+
 
 		if (this->Grasp && this->GraspSpawnTo)
 		{
@@ -124,7 +146,7 @@ void AGasTrapManager::OnTriggerEnter(UPrimitiveComponent * HitComp, AActor * Oth
 			this->GraspOrigionalPosition = this->Grasp->GetActorLocation();
 			this->GraspOrigionalRotation = this->Grasp->GetActorRotation();
 
-			this->Grasp->SetActorLocation(this->GraspSpawnTo->GetActorLocation());
+			//this->Grasp->SetActorLocation(this->GraspSpawnTo->GetActorLocation());
 		}
 	}
 
@@ -134,14 +156,31 @@ void AGasTrapManager::Spawn()
 {
 	if (this->Grasp)
 	{
+		if (this->Grasp && this->GraspSpawnTo)
+		{
+			auto meshComponent = this->Grasp->GetComponentByClass(UStaticMeshComponent::StaticClass());
+
+			if (meshComponent)
+			{
+				auto meshCmp = reinterpret_cast<UStaticMeshComponent*>(meshComponent);
+				if (meshCmp)
+				{
+					meshCmp->SetSimulatePhysics(false);
+					meshCmp->SetEnableGravity(false);
+				}
+			}
+		}
+
+
 		this->Grasp->SetActorLocation(this->GraspOrigionalPosition);
 		this->Grasp->SetActorRotation(this->GraspOrigionalRotation);
 
-		UStaticMeshComponent* staticMeshComponent = this->Grasp->FindComponentByClass<UStaticMeshComponent>();
-		if (staticMeshComponent)
-		{
-			staticMeshComponent->SetVisibility(true);
-		}
+		this->Grasp->SetActorHiddenInGame(false);
+		//UStaticMeshComponent* staticMeshComponent = this->Grasp->FindComponentByClass<UStaticMeshComponent>();
+		//if (staticMeshComponent)
+		//{
+		//	staticMeshComponent->SetVisibility(true);
+		//}
 	}
 
 	if (this->MistParticle)
@@ -161,10 +200,8 @@ void AGasTrapManager::Spawn()
 		UGameplayStatics::PlaySoundAtLocation(this, GasEnds, GetActorLocation());
 	}
 
-	if (this->GasLeak)
-	{
-		this->GasLeak->Stop();
-	}
+	// stop audios
+	this->SetAudioPlay(false);
 
 	this->timer = -1.0f;
 }
@@ -172,4 +209,28 @@ void AGasTrapManager::Spawn()
 bool AGasTrapManager::IsDone()
 {
 	return this->isDone;
+}
+
+void AGasTrapManager::SetAudioPlay(bool a_state)
+{
+	// stop sounds
+	auto comps = this->GetComponentsByClass(UAudioComponent::StaticClass());
+	for (auto& e : comps)
+	{
+		if (e)
+		{
+			auto cmp = reinterpret_cast<UAudioComponent*>(e);
+			if (cmp)
+			{
+				if (a_state)
+				{
+					cmp->Play();
+				}
+				else
+				{
+					cmp->Stop();
+				}
+			}
+		}
+	}
 }

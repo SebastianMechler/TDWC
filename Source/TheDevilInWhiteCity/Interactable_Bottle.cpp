@@ -27,83 +27,83 @@ void AInteractable_Bottle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (this->EffectStarted)
-	{
-		EffectInterpollationTime += DeltaTime * this->EffectFadeInDurationFactor;
+	//if (this->EffectStarted)
+	//{
+	//	EffectInterpollationTime += DeltaTime * this->EffectFadeInDurationFactor;
 
-		float x = FMath::Lerp(0.0f, this->EffectBlurMax, EffectInterpollationTime);
-		this->PostProcessVolume->Settings.DepthOfFieldFarBlurSize = x;
-		this->PostProcessVolume->Settings.DepthOfFieldNearBlurSize = x;
+	//	float x = FMath::Lerp(0.0f, this->EffectBlurMax, EffectInterpollationTime);
+	//	this->PostProcessVolume->Settings.DepthOfFieldFarBlurSize = x;
+	//	this->PostProcessVolume->Settings.DepthOfFieldNearBlurSize = x;
 
-		if (EffectInterpollationTime >= 1.0f)
-		{
-			// Destroy bottle
-			auto world = this->GetWorld();
-			if (world)
-			{
-				world->DestroyActor(this);
-			}
-			this->EffectStarted = false;
+	//	if (EffectInterpollationTime >= 1.0f)
+	//	{
+	//		// Destroy bottle
+	//		auto world = this->GetWorld();
+	//		if (world)
+	//		{
+	//			world->DestroyActor(this);
+	//		}
+	//		this->EffectStarted = false;
 
-			// effect ends
-		}
-	}
+	//		// effect ends
+	//	}
+	//}
 
-	if (!this->Started)
-	{
-		return;
-	}
+	//if (!this->Started)
+	//{
+	//	return;
+	//}
 
-	auto newRotation = FMath::Lerp(StartRotation, EndRotation, interpollationTime);
-	SetActorRotation(newRotation);
+	//auto newRotation = FMath::Lerp(StartRotation, EndRotation, interpollationTime);
+	//SetActorRotation(newRotation);
 
-	if (interpollationTime >= 1.0f)
-	{
-		this->Started = false;
+	//if (interpollationTime >= 1.0f)
+	//{
+	//	this->Started = false;
 
-		// start effect
-		if (this->PostProcessVolume)
-		{
-			this->PostProcessVolume->Settings.bOverride_DepthOfFieldMethod = true;
-			this->PostProcessVolume->Settings.bOverride_DepthOfFieldNearBlurSize = true;
-			this->PostProcessVolume->Settings.bOverride_DepthOfFieldFarBlurSize = true;
-			this->EffectStarted = true;
-			EffectInterpollationTime = 0.0f;
+	//	// start effect
+	//	if (this->PostProcessVolume)
+	//	{
+	//		this->PostProcessVolume->Settings.bOverride_DepthOfFieldMethod = true;
+	//		this->PostProcessVolume->Settings.bOverride_DepthOfFieldNearBlurSize = true;
+	//		this->PostProcessVolume->Settings.bOverride_DepthOfFieldFarBlurSize = true;
+	//		this->EffectStarted = true;
+	//		EffectInterpollationTime = 0.0f;
 
 
-			auto meshComponent = this->FindComponentByClass<UStaticMeshComponent>();
-			if (meshComponent)
-			{
-				//meshComponent->bVisible = false;
-				//meshComponent->bHiddenInGame = true;
-				meshComponent->ToggleVisibility();
-			}
+	//		auto meshComponent = this->FindComponentByClass<UStaticMeshComponent>();
+	//		if (meshComponent)
+	//		{
+	//			//meshComponent->bVisible = false;
+	//			//meshComponent->bHiddenInGame = true;
+	//			meshComponent->ToggleVisibility();
+	//		}
 
-			//USceneComponent* node = Cast<USceneComponent>(this);
-			//if (node)
-			//{
-			//	node->ToggleVisibility(false);
-			//}
-			
+	//		//USceneComponent* node = Cast<USceneComponent>(this);
+	//		//if (node)
+	//		//{
+	//		//	node->ToggleVisibility(false);
+	//		//}
+	//		
 
-			
-			////auto meshComponent = this->GetComponentByClass<>()
-			//auto meshComponent = this->FindComponentByClass<UStaticMeshComponent>();
-			//if (meshComponent)
-			//{
-			//	meshComponent->bVisible = false;
-			//	meshComponent->bHiddenInGame = true;
-			//	//this->PlayerCamera = camera;
-			//}
+	//		
+	//		////auto meshComponent = this->GetComponentByClass<>()
+	//		//auto meshComponent = this->FindComponentByClass<UStaticMeshComponent>();
+	//		//if (meshComponent)
+	//		//{
+	//		//	meshComponent->bVisible = false;
+	//		//	meshComponent->bHiddenInGame = true;
+	//		//	//this->PlayerCamera = camera;
+	//		//}
 
-		}
+	//	}
 
-		// fade effect
-		// delete bottle
-		// ...
-	}
+	//	// fade effect
+	//	// delete bottle
+	//	// ...
+	//}
 
-	interpollationTime += DeltaTime * DrinkSpeed;
+	//interpollationTime += DeltaTime * DrinkSpeed;
 }
 
 void AInteractable_Bottle::Interact(AActor* a_player)
@@ -123,33 +123,32 @@ void AInteractable_Bottle::OnViewSpace(AActor* a_player)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[View interaction Bottle] OnViewSpace..."));
 
-	auto World = this->GetWorld();
-	//auto Owner = this->GetActor();
+	//auto World = this->GetWorld();
+	////auto Owner = this->GetActor();
 
-	if (!World || !a_player)
-	{
-		return;
-	}
+	//if (!World || !a_player)
+	//{
+	//	return;
+	//}
 
-	UCameraComponent* cameraPtr = a_player->FindComponentByClass<UCameraComponent>();
-	if (!cameraPtr)
-	{
-		return;
-	}
+	//UCameraComponent* cameraPtr = a_player->FindComponentByClass<UCameraComponent>();
+	//if (!cameraPtr)
+	//{
+	//	return;
+	//}
 
-	this->Started = true;
+	//this->Started = true;
 
-	// play drink sounds
-	if (DrinkSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, DrinkSound, GetActorLocation());
-	}
+	//// play drink sounds
+	//if (DrinkSound)
+	//{
+	//	UGameplayStatics::PlaySoundAtLocation(this, DrinkSound, GetActorLocation());
+	//}
 
-	FRotator NewRotation = GetActorRotation();
-	NewRotation.Pitch += 90.0f;
-	this->EndRotation = NewRotation;
+	//FRotator NewRotation = GetActorRotation();
+	//NewRotation.Pitch += 90.0f;
+	//this->EndRotation = NewRotation;
 
-	this->StartRotation = GetActorRotation();
+	//this->StartRotation = GetActorRotation();
 
-	//World->DestroyActor(Owner);
 }

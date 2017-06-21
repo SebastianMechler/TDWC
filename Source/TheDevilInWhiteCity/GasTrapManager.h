@@ -49,21 +49,13 @@ public:
 		AActor* GraspSpawnTo = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		AActor* GasSpawnPoint = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		USoundBase* GasStarts = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* GasEnds = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		USoundBase* HorseSoundStarts = nullptr;
-
-		//class UParticleSystemComponent* PSC;
+	UBoxComponent* Collider = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-	UBoxComponent* Collider = nullptr;
+		int ExplosionForce = 155000;
 
 	UFUNCTION() 
 	void OnTriggerEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
@@ -72,13 +64,16 @@ public:
 
 	bool IsDone();
 
+
+
 private:
+	void SetAudioPlay(bool a_state);
+
 	FVector GraspOrigionalPosition = FVector(0.0f, 0.0f, 0.0f);
 	FRotator GraspOrigionalRotation;
 	UParticleSystemComponent* GasParticle= nullptr;
 	UParticleSystemComponent* MistParticle = nullptr;
 	bool isDone = false;
 	float timer = -1.0f;
-
-	UAudioComponent* GasLeak = nullptr;
+	float deathTimer = -1.0f;
 };

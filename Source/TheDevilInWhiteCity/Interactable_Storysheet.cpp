@@ -2,6 +2,7 @@
 
 #include "TheDevilInWhiteCity.h"
 #include "Interactable_Storysheet.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -37,8 +38,20 @@ EInteractionType AInteractable_Storysheet::GetInteractionType()
 	this->OriginalLocation = GetActorLocation();
 	this->OriginalRotation = GetActorRotation();
 
-	// TODO return EInteractionType::View;
-	return EInteractionType::World;
+	// play sound
+	if (this->InteractionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, this->InteractionSound, GetActorLocation());
+	}
+
+	// play talk sound
+	if (this->TalkSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, this->TalkSound, GetActorLocation());
+	}
+
+	return EInteractionType::View;
+	//return EInteractionType::World;
 }
 
 void AInteractable_Storysheet::OnViewSpace(AActor* a_player)
@@ -50,6 +63,8 @@ void AInteractable_Storysheet::OnViewSpace(AActor* a_player)
 
 	SetActorLocation(OriginalLocation);
 	SetActorRotation(OriginalRotation);
+
+
 
 	//auto world = this->GetWorld();
 	//if (!world)

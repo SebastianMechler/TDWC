@@ -42,12 +42,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* CloseSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* SlamDoorSound = nullptr;
+
 	void SetLockState(bool a_state);
+
+	void SlamDoor();
 
 	// Interface functions
 	void Interact(AActor* a_player) override;
 	EInteractionType GetInteractionType() override;
 	void OnViewSpace(AActor* a_player) override;
 
+private:
+	bool isSlammed = false;
 
 };

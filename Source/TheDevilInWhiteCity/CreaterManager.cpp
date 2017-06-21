@@ -18,6 +18,7 @@ void ACreaterManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// set all ghosts to hidden
 	for (auto& e : this->Creaters)
 	{
 		if (e)
@@ -65,7 +66,7 @@ void ACreaterManager::Tick(float DeltaTime)
 
 	if(this->timer >= 0.0f)
 	{
-		timer += DeltaTime;
+		this->timer += DeltaTime;
 	}
 
 	if (this->timer < ShowDelay)
@@ -105,19 +106,6 @@ void ACreaterManager::Tick(float DeltaTime)
 				}
 			}
 		}
-		//else
-		//{
-		//	if (!this->isHidden)
-		//	{
-		//		this->isHidden = true;
-		//		// hide
-		//		auto meshComponent = e->FindComponentByClass<UStaticMeshComponent>();
-		//		if (meshComponent)
-		//		{
-		//			meshComponent->SetVisibility(false);
-		//		}
-		//	}
-		//}
 	}
 }
 

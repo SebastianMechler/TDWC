@@ -45,7 +45,7 @@ public:
 	AActor* CurrentInteractionObject = nullptr; // current interaction object
 	FVector CurrentInteractionViewPoint = FVector(0.0f, 0.0f, 0.0f); // current point the object will move to (infront of camera)
 	FVector CurrentInteractionMoveDirection = FVector(0.0f, 0.0f, 0.0f); // direction the interaction object moves (direction to camera view point)
-	float InteractionViewPointDistance = 100.0f; // distance which defines the point infront of the camera where the object moves to
+	float InteractionViewPointDistance = 50.0f; // distance which defines the point infront of the camera where the object moves to
 	float InteractionViewProjectSpeed = 300.0f; // speed in which the object moves to the camera
 	float CurrentInteractionObjectMaxDistance = 0.0f;
 	float MaxViewDistance = 5.0f;
