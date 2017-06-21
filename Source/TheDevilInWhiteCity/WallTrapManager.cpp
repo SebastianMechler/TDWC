@@ -26,6 +26,26 @@ void AWallTrapManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
+	// FUCK YOU UNREAL
+	// unreal TArray<AActor*> as UPROPERTY(EditAnywhere, Category="Gameplay") does not work...
+	if (this->WallTrapLightActor01)
+	{
+		this->WallTrapLights.Add(reinterpret_cast<AWallTrapLight*>(WallTrapLightActor01));
+	}
+	if (this->WallTrapLightActor02)
+	{
+		this->WallTrapLights.Add(reinterpret_cast<AWallTrapLight*>(WallTrapLightActor02));
+	}
+	if (this->WallTrapLightActor03)
+	{
+		this->WallTrapLights.Add(reinterpret_cast<AWallTrapLight*>(WallTrapLightActor03));
+	}
+	if (this->WallTrapLightActor04)
+	{
+		this->WallTrapLights.Add(reinterpret_cast<AWallTrapLight*>(WallTrapLightActor04));
+	}
+		
 	// disable all lights
 	this->SetLightState(false);
 
@@ -274,6 +294,9 @@ void AWallTrapManager::SetLightState(bool a_state)
 	{
 		if (e)
 		{
+			#ifdef UE_BUILD_DEBUG
+							GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] enabling light..."));
+			#endif
 			// TODO: MAYBE PLAY SOME SOUND FOR ENABLING ALL LIGHTS AT ONCE?
 			e->SetLightState(a_state);
 		}
@@ -283,42 +306,42 @@ void AWallTrapManager::SetLightState(bool a_state)
 bool AWallTrapManager::IsPlayerWalkingBackwards()
 {
 	// DO NOT USE THIS....
-//	if (this->Player)
-//	{
-//		// get last pos
-//		FVector currentPlayerPos = this->Player->GetActorLocation();
-//
-//		// calc direction player moved
-//		FVector moveDirection = currentPlayerPos - this->lastPlayerPos;
-//		if (moveDirection.Size() > 0.1f)
-//		{
-//			moveDirection.Normalize();
-//
-//			// dot product to room middle object
-//			// if facing to him => disable lamps
-//
-//			//dot product between camera and MoveDistanceObject
-//			FVector CameraToAngleObject = this->Camera->GetComponentLocation() - this->FaceAngleObject->GetActorLocation();
-//			CameraToAngleObject.Normalize();
-//			float dot = FVector::DotProduct(moveDirection, CameraToAngleObject);
-//
-//			if (dot <= this->angleDot)
-//			{
-//#ifdef UE_BUILD_DEBUG
-//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player TRUE..."));
-//#endif
-//				return true;
-//			}
-//			else
-//			{
-//#ifdef UE_BUILD_DEBUG
-//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player FALSE..."));
-//#endif
-//				return false;
-//			}
-//
-//			this->lastPlayerPos = currentPlayerPos;
-//		}
-//	}
+	if (this->Player)
+	{
+		// get last pos
+		FVector currentPlayerPos = this->Player->GetActorLocation();
+
+		// calc direction player moved
+		FVector moveDirection = currentPlayerPos - this->lastPlayerPos;
+		if (moveDirection.Size() > 0.1f)
+		{
+			moveDirection.Normalize();
+
+			// dot product to room middle object
+			// if facing to him => disable lamps
+
+			//dot product between camera and MoveDistanceObject
+			FVector CameraToAngleObject = this->Camera->GetComponentLocation() - this->FaceAngleObject->GetActorLocation();
+			CameraToAngleObject.Normalize();
+			float dot = FVector::DotProduct(moveDirection, CameraToAngleObject);
+
+			if (dot <= this->angleDot)
+			{
+#ifdef UE_BUILD_DEBUG
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player TRUE..."));
+#endif
+				return true;
+			}
+			else
+			{
+#ifdef UE_BUILD_DEBUG
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player FALSE..."));
+#endif
+				return false;
+			}
+
+			this->lastPlayerPos = currentPlayerPos;
+		}
+	}
 	return false;
 }

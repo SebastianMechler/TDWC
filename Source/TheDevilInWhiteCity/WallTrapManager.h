@@ -51,6 +51,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//UPROPERTY(EditAnywhere, Category = "Gameplay")
+	//	TArray<AActor*> WallTrapLightActors; // contains all lights
+
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		AActor* Player = nullptr;
 
@@ -79,7 +82,16 @@ public:
 		FVector MoveDirection = FVector(-1.0f, 0.0f, 0.0f);
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		TArray<AWallTrapLight*> WallTrapLights; // contains all lights
+		AActor* WallTrapLightActor01 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AActor* WallTrapLightActor02 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AActor* WallTrapLightActor03 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AActor* WallTrapLightActor04 = nullptr;
 
 	UFUNCTION()
 		void OnTriggerEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
@@ -102,5 +114,6 @@ private:
 	UCameraComponent* Camera = nullptr;
 	UAudioComponent* WallMove = nullptr;
 
+	TArray<AWallTrapLight*> WallTrapLights; // contains all lights
 	FVector lastPlayerPos = FVector(0.0f, 0.0f, 0.0f);
 };
