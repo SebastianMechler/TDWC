@@ -4,7 +4,7 @@
 #include "Interactable_Grasp.h"
 #include "GasTrapManager.h"
 #include "Interactable_Heater.h"
-
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AInteractable_Grasp::AInteractable_Grasp()
@@ -51,6 +51,12 @@ EInteractionType AInteractable_Grasp::GetInteractionType()
 		{
 			if (manager->IsDone())
 			{
+				// play pickup sound
+				if (this->PickUpSound)
+				{
+					UGameplayStatics::PlaySoundAtLocation(this, this->PickUpSound, GetActorLocation());
+				}
+
 				return EInteractionType::View;
 			}
 		}

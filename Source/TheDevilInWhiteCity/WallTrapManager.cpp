@@ -128,16 +128,16 @@ void AWallTrapManager::Tick(float DeltaTime)
 
 			if (dot <= this->angleDot)
 			{
-#ifdef UE_BUILD_DEBUG
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player TRUE..."));
-#endif
+//#ifdef UE_BUILD_DEBUG
+//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player TRUE..."));
+//#endif
 				isPlayerWalkingBackwards = true;
 			}
 			else
 			{
-#ifdef UE_BUILD_DEBUG
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player FALSE..."));
-#endif
+//#ifdef UE_BUILD_DEBUG
+//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] player FALSE..."));
+//#endif
 			}
 
 			this->lastPlayerPos = currentPlayerPos;
@@ -222,7 +222,7 @@ void AWallTrapManager::Tick(float DeltaTime)
 	if (this->WallMove)
 	{
 		// are we not moving?
-		if (!isMoving)
+		if (!isMoving || !this->isRunning)
 		{
 			// stop sound
 			this->WallMove->Stop();
@@ -276,6 +276,10 @@ void AWallTrapManager::OnTriggerExit(UPrimitiveComponent* OverlappedComp, AActor
 	{
 		this->isRunning = false;
 
+		if (this->WallMove)
+		{
+			this->WallMove->Stop();
+		}
 
 		for (auto& e : WallTrapLights)
 		{
