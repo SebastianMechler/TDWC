@@ -34,6 +34,24 @@ void ASilhouetteManager::Tick(float DeltaTime)
 
 	if (this->TrapTriggered && !this->TrapDone)
 	{
+		// check sound
+		if (this->SoundDelayTimer > 0.0f)
+		{
+			this->SoundDelayTimer -= DeltaTime;
+			if (this->SoundDelayTimer <= 0.0f)
+			{
+				// play sound
+				if (this->GhostScreamSound)
+				{
+					if (this->Ghost)
+					{
+						UGameplayStatics::PlaySoundAtLocation(this, this->GhostScreamSound, this->Ghost->GetActorLocation());
+					}
+				}
+				this->SoundDelayTimer = -1.0f;
+			}
+		}
+
 		// move ghost
 		if (this->Ghost && this->MoveGhostTo)
 		{
@@ -51,7 +69,11 @@ void ASilhouetteManager::Tick(float DeltaTime)
 			{
 				if (this->Door)
 				{
-					this->Door->SlamDoor();
+					auto d = reinterpret_cast<AInteractable_Door*>(this->Door);
+					if (d)
+					{
+						d->SlamDoor();
+					}
 				}
 				this->TrapDone = true;
 				this->Ghost->SetActorHiddenInGame(true);
@@ -76,13 +98,13 @@ void ASilhouetteManager::OnTriggerEnter(class UPrimitiveComponent* HitComp, clas
 	{
 		this->TrapTriggered = true;
 
-		if (this->GhostScreamSound)
-		{
-			if (this->Ghost)
-			{
-				UGameplayStatics::PlaySoundAtLocation(this, this->GhostScreamSound, this->Ghost->GetActorLocation());
-			}
-		}
+		//if (this->GhostScreamSound)
+		//{
+		//	if (this->Ghost)
+		//	{
+		//		UGameplayStatics::PlaySoundAtLocation(this, this->GhostScreamSound, this->Ghost->GetActorLocation());
+		//	}
+		//}
 
 //#ifdef UE_BUILD_DEBUG
 //				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[GhostTrap] triggered..."));

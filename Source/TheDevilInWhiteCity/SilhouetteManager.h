@@ -23,8 +23,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		AInteractable_Door* Door = nullptr;
+		UBoxComponent* Collider = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		AActor* Ghost = nullptr;
@@ -38,14 +39,18 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* GhostScreamSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		float GhostMovementSpeed = 5.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AActor* Door = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		float SoundDelayTimer = 0.3f;
+
 	UFUNCTION()
 		void OnTriggerEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		UBoxComponent* Collider = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		float GhostMovementSpeed = 5.0f;
 
 
 private:

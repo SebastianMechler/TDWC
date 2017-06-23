@@ -204,6 +204,7 @@ void AGasTrapManager::Spawn()
 	this->SetAudioPlay(false);
 
 	this->timer = -1.0f;
+	this->deathTimer = -1.0f;
 }
 
 bool AGasTrapManager::IsDone()
