@@ -58,7 +58,7 @@ void ACreaterManager::Tick(float DeltaTime)
 				auto meshComponent = e->FindComponentByClass<UStaticMeshComponent>();
 				if (meshComponent)
 				{
-					meshComponent->SetVisibility(false);
+					//meshComponent->SetVisibility(false);
 				}
 			}
 		}

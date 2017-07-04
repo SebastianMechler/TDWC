@@ -68,7 +68,7 @@ void AWallTrapManager::BeginPlay()
 
 			if (this->MoveDistanceObject)
 			{
-				actorLocation.X = MoveDistanceObject->GetActorLocation().X;
+				actorLocation.Y = MoveDistanceObject->GetActorLocation().Y;
 				e.endPosition = actorLocation;
 			}
 		}
@@ -174,10 +174,10 @@ void AWallTrapManager::Tick(float DeltaTime)
 				FVector newPosition = e.wall->GetActorLocation() - (MoveDirection * DeltaTime * 100.0f * this->WallSpeed);
 				
 //#ifdef UE_BUILD_DEBUG
-//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] move unblock..."));
+//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] -move unblock..."));
 //#endif
 
-				if (newPosition.X < e.startPosition.X)
+				if (newPosition.Y > e.startPosition.Y)
 				{
 					isMoving = true;
 					e.wall->SetActorLocation(newPosition);
@@ -199,7 +199,7 @@ void AWallTrapManager::Tick(float DeltaTime)
 //				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[WallTrap] move block..."));
 //#endif
 
-				if (newPosition.X > e.endPosition.X)
+				if (newPosition.Y < e.endPosition.Y)
 				{
 					e.wall->SetActorLocation(newPosition);
 					isMoving = true;

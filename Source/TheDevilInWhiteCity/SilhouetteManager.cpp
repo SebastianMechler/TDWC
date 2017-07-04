@@ -73,6 +73,8 @@ void ASilhouetteManager::Tick(float DeltaTime)
 					if (d)
 					{
 						d->SlamDoor();
+						d->SetLockState(false);
+						d->SetInteractState(false);
 					}
 				}
 				this->TrapDone = true;

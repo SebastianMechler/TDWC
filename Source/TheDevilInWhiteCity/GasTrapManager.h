@@ -57,6 +57,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		int ExplosionForce = 155000;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		float TimeTillDead = 30.0f;
+
 	UFUNCTION() 
 	void OnTriggerEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 

@@ -45,7 +45,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* SlamDoorSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* LockedDoorSound = nullptr;
+
 	void SetLockState(bool a_state);
+	void SetInteractState(bool a_state);
 
 	void SlamDoor();
 

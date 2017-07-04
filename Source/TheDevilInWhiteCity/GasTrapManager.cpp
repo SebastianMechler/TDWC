@@ -76,14 +76,16 @@ void AGasTrapManager::Tick(float DeltaTime)
 	{
 		this->deathTimer += DeltaTime;
 
-		if(deathTimer >= 60.0f)
+		if(deathTimer >= this->TimeTillDead)
 		{
 			deathTimer = -1.0f;
+
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT("DeadMenu"));
 
 			// stop sounds
 			this->SetAudioPlay(false);
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You are dead!"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You are dead!"));
 		}
 	}
 }

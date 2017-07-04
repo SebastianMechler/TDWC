@@ -62,6 +62,10 @@ void AInteractable_Door::Interact(AActor * a_player)
 	if (this->isLocked)
 	{
 		// TODO: error sound locked
+		if (this->LockedDoorSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->LockedDoorSound, GetActorLocation());
+		}
 		return;
 	}
 
@@ -134,6 +138,11 @@ void AInteractable_Door::OnViewSpace(AActor* a_player)
 void AInteractable_Door::SetLockState(bool a_state)
 {
 	this->isLocked = a_state;
+}
+
+void AInteractable_Door::SetInteractState(bool a_state)
+{
+	this->interacted = a_state;
 }
 
 void AInteractable_Door::SlamDoor()

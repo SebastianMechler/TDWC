@@ -79,7 +79,7 @@ public:
 		float angleDot = 0.55f; // values from 0.0f to 1.0f are good here
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		FVector MoveDirection = FVector(-1.0f, 0.0f, 0.0f);
+		FVector MoveDirection = FVector(0.0f, -1.0f, 0.0f);
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		AActor* WallTrapLightActor01 = nullptr;
