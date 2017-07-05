@@ -37,12 +37,14 @@ void ALabyrinthManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!this->IsTriggerdOnce)
+	if (!this->IsTriggerdOnce || !this->Player)
 	{
 		return;
 	}
 
 	// how many walls do we have
+	auto totalWalls = this->Walls.Num();
+	auto totalWallsMoved = 0;
 
 	for (auto& wall : this->Walls)
 	{
@@ -67,6 +69,7 @@ void ALabyrinthManager::Tick(float DeltaTime)
 				{
 					location.Z = this->UpPositionZ;
 					wall.Pointer->SetActorLocation(location);
+					totalWallsMoved++;
 				}
 			}
 			break;
@@ -84,12 +87,22 @@ void ALabyrinthManager::Tick(float DeltaTime)
 				{
 					location.Z = this->DownPositionZ;
 					wall.Pointer->SetActorLocation(location);
+					totalWallsMoved++;
 				}
 			}
 			break;
 		default:
 			break;
 		}
+	}
+
+	if (totalWallsMoved == totalWalls)
+	{
+		// disable this trigger
+#ifdef UE_BUILD_DEBUG
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("LAB: WallMoveDone"));
+#endif
+		this->Player = nullptr;
 	}
 }
 
