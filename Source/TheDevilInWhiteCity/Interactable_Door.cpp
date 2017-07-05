@@ -149,5 +149,6 @@ void AInteractable_Door::SlamDoor()
 {
 	this->isLocked = false;
 	this->isSlammed = true;
+	this->interacted = false; 
 	this->Interact(nullptr);
 }
