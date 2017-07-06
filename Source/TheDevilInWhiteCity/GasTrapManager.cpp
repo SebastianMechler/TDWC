@@ -102,6 +102,11 @@ void AGasTrapManager::OnTriggerEnter(UPrimitiveComponent * HitComp, AActor * Oth
 		this->timer = 0.0f;
 		this->deathTimer = 0.0f;
 
+		if (this->Choking)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, Choking, GetActorLocation());
+		}
+
 		// Get StaticMeshComponent
 		if (this->Grasp && this->GraspSpawnTo)
 		{
@@ -160,6 +165,12 @@ void AGasTrapManager::Spawn()
 	{
 		if (this->Grasp && this->GraspSpawnTo)
 		{
+
+			if (this->INeedToGetOut)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, INeedToGetOut, GetActorLocation());
+			}
+
 			auto meshComponent = this->Grasp->GetComponentByClass(UStaticMeshComponent::StaticClass());
 
 			if (meshComponent)

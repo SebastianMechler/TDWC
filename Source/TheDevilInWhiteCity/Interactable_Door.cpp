@@ -48,12 +48,12 @@ void AInteractable_Door::Tick(float DeltaTime)
 
 	if (lerpTime > 1.0f)
 	{
-			interacted = false;
+		interacted = false;
 
-			if (this->isSlammed)
-			{
-				this->isLocked = true;
-			}
+		if (this->isSlammed)
+		{
+			this->isLocked = true;
+		}
 	}
 }
 
@@ -97,7 +97,7 @@ void AInteractable_Door::Interact(AActor * a_player)
 				UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
 			}
 		}
-		
+
 	}
 	else
 	{
@@ -149,6 +149,6 @@ void AInteractable_Door::SlamDoor()
 {
 	this->isLocked = false;
 	this->isSlammed = true;
-	this->interacted = false; 
+	this->interacted = false;
 	this->Interact(nullptr);
 }

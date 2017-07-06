@@ -77,7 +77,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* MovementSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* TalkSound = nullptr;
+
 private:
 	FVector MovementDirection = FVector(0.0f, 0.0f, 1.0f);
 	bool IsTriggerdOnce = false;
+	bool IsTalkSoundPlayed = false;
+	bool IsMoveSoundPlayed = false;
 };

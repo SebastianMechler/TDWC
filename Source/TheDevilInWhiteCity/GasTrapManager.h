@@ -52,6 +52,12 @@ public:
 		USoundBase* GasEnds = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* INeedToGetOut = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* Choking = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
 	UBoxComponent* Collider = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
@@ -63,6 +69,7 @@ public:
 	UFUNCTION() 
 	void OnTriggerEnter(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
+	UFUNCTION(BlueprintCallable, Category ="Gameplay")
 	void Spawn();
 
 	bool IsDone();

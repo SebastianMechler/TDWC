@@ -7,7 +7,7 @@
 // Sets default values
 ASilhouetteManager::ASilhouetteManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	this->Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
@@ -24,7 +24,7 @@ ASilhouetteManager::ASilhouetteManager()
 void ASilhouetteManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -40,14 +40,14 @@ void ASilhouetteManager::Tick(float DeltaTime)
 			this->SoundDelayTimer -= DeltaTime;
 			if (this->SoundDelayTimer <= 0.0f)
 			{
-				// play sound
-				if (this->GhostScreamSound)
-				{
-					if (this->Ghost)
-					{
-						UGameplayStatics::PlaySoundAtLocation(this, this->GhostScreamSound, this->Ghost->GetActorLocation());
-					}
-				}
+				//// play sound
+				//if (this->GhostScreamSound)
+				//{
+				//	if (this->Ghost)
+				//	{
+				//		UGameplayStatics::PlaySoundAtLocation(this, this->GhostScreamSound, this->Ghost->GetActorLocation());
+				//	}
+				//}
 				this->SoundDelayTimer = -1.0f;
 			}
 		}
@@ -81,13 +81,13 @@ void ASilhouetteManager::Tick(float DeltaTime)
 			}
 			else
 			{
-//#ifdef UE_BUILD_DEBUG
-//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[GhostTrap] Moving ghost..."));
-//#endif
+				//#ifdef UE_BUILD_DEBUG
+				//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[GhostTrap] Moving ghost..."));
+				//#endif
 				// move ghost
 				this->Ghost->SetActorLocation(newGhostLocation);
 			}
-			
+
 		}
 	}
 
@@ -99,6 +99,15 @@ void ASilhouetteManager::OnTriggerEnter(class UPrimitiveComponent* HitComp, clas
 	{
 		this->TrapTriggered = true;
 
+		// play sound
+		if (this->GhostScreamSound)
+		{
+			if (this->Ghost)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, this->GhostScreamSound, this->Ghost->GetActorLocation());
+			}
+		}
+
 		//if (this->GhostScreamSound)
 		//{
 		//	if (this->Ghost)
@@ -107,9 +116,9 @@ void ASilhouetteManager::OnTriggerEnter(class UPrimitiveComponent* HitComp, clas
 		//	}
 		//}
 
-//#ifdef UE_BUILD_DEBUG
-//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[GhostTrap] triggered..."));
-//#endif
+		//#ifdef UE_BUILD_DEBUG
+		//				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[GhostTrap] triggered..."));
+		//#endif
 		// play SCREAM
 
 

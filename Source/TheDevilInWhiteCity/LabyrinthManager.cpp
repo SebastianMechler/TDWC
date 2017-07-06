@@ -46,6 +46,8 @@ void ALabyrinthManager::Tick(float DeltaTime)
 	auto totalWalls = this->Walls.Num();
 	auto totalWallsMoved = 0;
 
+	bool shouldPlaySound = false;
+
 	for (auto& wall : this->Walls)
 	{
 		if (!wall.Pointer)
@@ -63,10 +65,20 @@ void ALabyrinthManager::Tick(float DeltaTime)
 
 				if (location.Z < UpPositionZ)
 				{
+					shouldPlaySound = true;
 					wall.Pointer->SetActorLocation(location);
 				}
 				else
 				{
+					if (!this->IsTalkSoundPlayed)
+					{
+						this->IsTalkSoundPlayed = true;
+
+						if (this->TalkSound)
+						{
+							UGameplayStatics::PlaySoundAtLocation(this, TalkSound, GetActorLocation());
+						}
+					}
 					location.Z = this->UpPositionZ;
 					wall.Pointer->SetActorLocation(location);
 					totalWallsMoved++;
@@ -81,6 +93,7 @@ void ALabyrinthManager::Tick(float DeltaTime)
 
 				if (location.Z > DownPositionZ)
 				{
+					shouldPlaySound = true;
 					wall.Pointer->SetActorLocation(location);
 				}
 				else
@@ -93,6 +106,16 @@ void ALabyrinthManager::Tick(float DeltaTime)
 			break;
 		default:
 			break;
+		}
+	}
+
+	if (shouldPlaySound && !IsMoveSoundPlayed)
+	{
+		this->IsMoveSoundPlayed = true;
+
+		if (this->MovementSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, MovementSound, GetActorLocation());
 		}
 	}
 

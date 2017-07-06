@@ -34,6 +34,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		AActor* Actor_Widget = nullptr;
 
+
 	void Interact(AActor* a_player) override;
 	void OnViewSpace(AActor* a_player) override;
 	EInteractionType GetInteractionType() override;
@@ -43,4 +44,5 @@ public:
 private:
 	bool canInteract = false;
 	bool isDone = false;
+	
 };

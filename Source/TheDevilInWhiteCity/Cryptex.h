@@ -67,5 +67,5 @@ public:
 
 private:
 	bool IsSolved = false;
-
+	
 };
