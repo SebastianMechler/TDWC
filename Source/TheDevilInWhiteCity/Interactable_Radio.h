@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Interface_Interactable.h"
+#include "SoundTrapManager.h"
 #include "Interactable_Radio.generated.h"
 
 UCLASS()
@@ -31,10 +32,18 @@ public:
 		USoundBase* InteractSound = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		int32 Index;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		ASoundTrapManager* Manager = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* LoopSound = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* TurnOnSound = nullptr;
+
+
 private:
 	UAudioComponent* Audio = nullptr;
 	float Duration = 0.0f;

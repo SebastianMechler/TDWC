@@ -3,6 +3,7 @@
 #include "TheDevilInWhiteCity.h"
 #include "Interactable_Door.h"
 #include "Kismet/GameplayStatics.h"
+#include "GasTrapManager.h"
 
 
 // Sets default values
@@ -41,6 +42,11 @@ void AInteractable_Door::Tick(float DeltaTime)
 	}
 	else
 	{
+		if (this->isOfficeDoor)
+		{
+			this->SetLockState(true);
+		}
+
 		// is being closed
 		FRotator newRotation = FMath::Lerp(this->endVector, this->startVector, this->lerpTime);
 		SetActorRotation(newRotation);
@@ -76,6 +82,7 @@ void AInteractable_Door::Interact(AActor * a_player)
 
 	if (!isOpen)
 	{
+
 		// get end rotation for opening
 		FRotator tmp = startVector;
 		tmp.Yaw += this->rotationAngleZ;
@@ -101,6 +108,15 @@ void AInteractable_Door::Interact(AActor * a_player)
 	}
 	else
 	{
+		// NEW CODE 17.07.2017
+		if (this->GasTrapManager)
+		{
+			AGasTrapManager* manager = reinterpret_cast<AGasTrapManager*>(this->GasTrapManager);
+			manager->Spawn();
+			this->GasTrapManager = nullptr;
+		}
+		// END NEW CODE XD
+
 		this->endVector = GetActorRotation();
 
 		isOpen = false;
@@ -151,4 +167,9 @@ void AInteractable_Door::SlamDoor()
 	this->isSlammed = true;
 	this->interacted = false;
 	this->Interact(nullptr);
+}
+
+void AInteractable_Door::SetSlamState(bool a_state)
+{
+	this->isSlammed = a_state;
 }

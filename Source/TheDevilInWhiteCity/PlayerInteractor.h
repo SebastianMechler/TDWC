@@ -40,6 +40,7 @@ public:
 
 	void PerformInteraction();
 	void ProjectToView(float DeltaTime);
+	bool IsInteractionObjectBehindCamera();
 
 	EInteractionState CurrentInteractionState = EInteractionState::None; // current state of the interaction process
 	AActor* CurrentInteractionObject = nullptr; // current interaction object

@@ -4,6 +4,7 @@
 #include "PlayerInteractor.h"
 #include "Interface_Interactable.h"
 #include "InteractableExample.h"
+#include "Interactable_Storysheet.h"
 
 UPlayerInteractor::UPlayerInteractor()
 {
@@ -69,6 +70,7 @@ void UPlayerInteractor::PerformInteraction()
 #ifdef UE_BUILD_DEBUG
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] player is done..."));
 #endif
+
 			// TODO: add object to inventory
 			this->PlayerController->SetPaused(false);
 			IInterface_Interactable* base = Cast<IInterface_Interactable>(this->CurrentInteractionObject);
@@ -131,7 +133,9 @@ void UPlayerInteractor::PerformInteraction()
 
 					// start and end rotation
 					this->StartRotation = result.GetActor()->GetActorRotation();
-					FVector vec = this->PlayerCamera->GetComponentLocation() - this->CurrentInteractionObject->GetActorLocation();
+					//FVector vec = //this->PlayerCamera->GetComponentLocation() - this->CurrentInteractionObject->GetActorLocation();
+					FVector vec = this->PlayerCamera->GetComponentLocation() - this->CurrentInteractionViewPoint;
+						
 					vec.Normalize();
 					this->EndRotation = FRotationMatrix::MakeFromZ(vec).Rotator();
 
@@ -180,13 +184,12 @@ void UPlayerInteractor::ProjectToView(float DeltaTime)
 	{
 		// object reached camera view point
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] object in view..."));
+		this->CurrentInteractionObject->SetActorRotation(EndRotation);
+		CurrentInteractionState = EInteractionState::InView;
+
 
 		//auto PlayerRot = FRotationMatrix::MakeFromX(this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation()).Rotator();
 		//this->CurrentInteractionObject->SetActorRotation(PlayerRot);
-
-		this->CurrentInteractionObject->SetActorRotation(EndRotation);
-
-		CurrentInteractionState = EInteractionState::InView;
 	}
 	else
 	{
@@ -197,9 +200,61 @@ void UPlayerInteractor::ProjectToView(float DeltaTime)
 
 		auto newRotation = FMath::Lerp(StartRotation, EndRotation, 1.0f - distance / this->CurrentInteractionObjectMaxDistance);
 		this->CurrentInteractionObject->SetActorRotation(newRotation);
+
+		if (IsInteractionObjectBehindCamera())
+		{
+			// object went behind camera
+			// we have to do shit manually... fuck
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[ViewInteraction] object in view..."));
+
+			this->CurrentInteractionObject->SetActorLocation(this->CurrentInteractionViewPoint);
+			this->CurrentInteractionObject->SetActorRotation(EndRotation);
+			CurrentInteractionState = EInteractionState::InView;
+		}
 	}
 }
 
+
+bool UPlayerInteractor::IsInteractionObjectBehindCamera()
+{
+	// additional check to avoid bug 0x32FABC
+	// we need two vectors
+	// first one is from viewpoint to camera
+	FVector viewpointToCamera = (this->PlayerCamera->GetComponentLocation() - this->CurrentInteractionViewPoint);
+	viewpointToCamera.Normalize();
+
+	// second vector is from Camera to CurrentInteractionObject
+	FVector cameraToCurrentInteractionObject = (this->CurrentInteractionObject->GetActorLocation() - this->PlayerCamera->GetComponentLocation());
+	cameraToCurrentInteractionObject.Normalize();
+
+	// now we have the following vectors
+	//                                           =>
+	//                                        =>
+	//                                     =>
+	// [OBJECT]                    [CAMERA]      [VIEWPOINT]
+	//                                     =>
+	//                                        =>
+	//                                          =>
+
+	// first vector
+	//                             [CAMERA]<----[VIEWPOINT]
+	//                             viewPointToCamera
+
+	// second vector
+	// [OBJECT]<------------------[CAMERA]      [VIEWPOINT]
+	// cameraToObject
+
+	// now dotproduct to check if the object is behind the camera, then we just set the position to viewpoint and say this process is done
+	float dot = FVector::DotProduct(viewpointToCamera, cameraToCurrentInteractionObject);
+	
+	if (dot > 0.0f)
+	{
+		return true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, TEXT("[ViewInteraction] dot > 0.0f"));
+	}
+
+	return false;
+}
 //auto staticMesh = result.Actor->FindComponentByClass<UStaticMeshComponent>();
 //if (staticMesh)
 //{

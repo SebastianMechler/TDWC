@@ -71,6 +71,9 @@ void AInteractable_Radio::Interact(AActor * a_player)
 		return;
 	}
 
+	if (Manager != nullptr)
+		Manager->Notify(Index);
+
 	if (this->InteractSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, this->InteractSound, GetActorLocation());

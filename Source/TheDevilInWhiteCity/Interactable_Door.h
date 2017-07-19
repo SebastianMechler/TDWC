@@ -24,7 +24,7 @@ protected:
 	float lerpTime = 0.0f;
 	bool interacted = false;
 	bool isOpen = false;
-	bool isLocked = true;
+
 
 public:
 	// Called every frame
@@ -46,12 +46,26 @@ public:
 		USoundBase* SlamDoorSound = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AActor* GasTrapManager = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* LockedDoorSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	bool isLocked = true;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		bool isOfficeDoor = false;
+
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
 	void SetLockState(bool a_state);
+
 	void SetInteractState(bool a_state);
 
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
 	void SlamDoor();
+
+	void SetSlamState(bool a_state);
 
 	// Interface functions
 	void Interact(AActor* a_player) override;

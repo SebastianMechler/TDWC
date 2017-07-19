@@ -19,6 +19,21 @@ void AInteractable_Storysheet::BeginPlay()
 	
 	this->OriginalLocation = GetActorLocation();
 	this->OriginalRotation = GetActorRotation();
+
+	// get audio component
+	auto component = GetComponentByClass(UAudioComponent::StaticClass());
+	if (component)
+	{
+		this->Audio = reinterpret_cast<UAudioComponent*>(component);
+		if (this->Audio)
+		{
+			if (this->TalkSound)
+			{
+				this->Audio->SetSound(this->TalkSound);
+			}
+			this->Audio->Stop();
+		}
+	}
 }
 
 // Called every frame
@@ -45,9 +60,28 @@ EInteractionType AInteractable_Storysheet::GetInteractionType()
 	}
 
 	// play talk sound
-	if (this->TalkSound)
+	if (this->Audio && this->TalkSound)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, this->TalkSound, GetActorLocation());
+		if (!this->Audio->IsPlaying())
+		{
+			this->Audio->Play();
+		}
+	}
+
+	// update display text
+	if (StorysheetManager)
+	{
+		StorysheetManager->SetText(this->TalkText);
+	}
+
+	
+	// SHOW MANAGER + CHANGE BLUEPRINT IF
+	if (this->StorysheetManager)
+	{
+		this->StorysheetManager->SetActorHiddenInGame(false);
+#ifdef UE_BUILD_DEBUG
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[Interactable_StorySheet]Showing actor..."));
+#endif
 	}
 
 	return EInteractionType::View;
@@ -65,12 +99,30 @@ void AInteractable_Storysheet::OnViewSpace(AActor* a_player)
 	SetActorRotation(OriginalRotation);
 
 
+#ifdef UE_BUILD_DEBUG
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("[Interactable_StorySheet]OnViewExit..."));
+#endif
 
-	//auto world = this->GetWorld();
-	//if (!world)
-	//{
-	//	return;
-	//}
+	// HIDE MANAGER
+	if (this->StorysheetManager)
+	{
+		this->StorysheetManager->SetActorHiddenInGame(true);
+	}
 
-	//world->DestroyActor(this);
+	if (this->Audio && this->TalkSound)
+	{
+		if (this->Audio->IsPlaying())
+		{
+			this->Audio->Stop();
+		}
+	}
 }
+
+
+//auto world = this->GetWorld();
+//if (!world)
+//{
+//	return;
+//}
+
+//world->DestroyActor(this);

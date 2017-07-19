@@ -41,26 +41,27 @@ void AInteractable_Grasp::Interact(AActor * a_player)
 
 EInteractionType AInteractable_Grasp::GetInteractionType()
 {
-	if (GasTrapManager && !this->isDone)
-	{
-		this->isDone = true;
+	// REMOVED BECAUSE IT CANNOT BE INTERACTED WITH IT ANYMORE
+	//if (GasTrapManager && !this->isDone)
+	//{
+	//	this->isDone = true;
 
-		// cast to
-		AGasTrapManager* manager = reinterpret_cast<AGasTrapManager*>(this->GasTrapManager);
-		if (manager)
-		{
-			if (manager->IsDone())
-			{
-				// play pickup sound
-				if (this->PickUpSound)
-				{
-					UGameplayStatics::PlaySoundAtLocation(this, this->PickUpSound, GetActorLocation());
-				}
+	//	// cast to
+	//	AGasTrapManager* manager = reinterpret_cast<AGasTrapManager*>(this->GasTrapManager);
+	//	if (manager)
+	//	{
+	//		if (manager->IsDone())
+	//		{
+	//			// play pickup sound
+	//			if (this->PickUpSound)
+	//			{
+	//				UGameplayStatics::PlaySoundAtLocation(this, this->PickUpSound, GetActorLocation());
+	//			}
 
-				return EInteractionType::View;
-			}
-		}
-	}
+	//			return EInteractionType::View;
+	//		}
+	//	}
+	//}
 
 	return EInteractionType::World;
 }

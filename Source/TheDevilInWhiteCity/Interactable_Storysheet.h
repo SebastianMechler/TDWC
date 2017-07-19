@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Interface_Interactable.h" // EXAMPLE => include Interface header
+#include "StorysheetManager.h"
 #include "Interactable_Storysheet.generated.h"
 
 UCLASS()
@@ -32,6 +33,15 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* TalkSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		UAudioComponent* Audio = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		FText TalkText;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AStorysheetManager* StorysheetManager = nullptr;
 private:
 	FVector OriginalLocation = FVector(0.0f, 0.0f, 0.0f);
 	FRotator OriginalRotation;
