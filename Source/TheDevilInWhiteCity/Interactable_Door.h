@@ -72,7 +72,6 @@ public:
 	EInteractionType GetInteractionType() override;
 	void OnViewSpace(AActor* a_player) override;
 
-private:
 	bool isSlammed = false;
 
 };

@@ -58,14 +58,14 @@ void ASilhouetteManager::Tick(float DeltaTime)
 			FVector newGhostLocation = this->Ghost->GetActorLocation();
 
 			// set new position
-			newGhostLocation.Y -= this->GhostMovementSpeed * 100.0f * DeltaTime;
+			newGhostLocation.X += this->GhostMovementSpeed * 100.0f * DeltaTime;
 
 			// -600 start
 			// -1500 end
 
 			FVector ghostLocation = this->MoveGhostTo->GetActorLocation();
 
-			if (ghostLocation.Y >= newGhostLocation.Y)
+			if (ghostLocation.X <= newGhostLocation.X)
 			{
 				if (this->Door)
 				{
@@ -97,6 +97,16 @@ void ASilhouetteManager::OnTriggerEnter(class UPrimitiveComponent* HitComp, clas
 {
 	if (OtherActor == this->Player && !this->TrapTriggered)
 	{
+		// only trigger trap once...
+		if (this->Door)
+		{
+				auto d = reinterpret_cast<AInteractable_Door*>(this->Door);
+				if (d && d->isSlammed)
+				{
+					return;
+				}
+		}
+
 		this->TrapTriggered = true;
 
 		// play sound
