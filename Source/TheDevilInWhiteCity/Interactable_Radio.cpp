@@ -71,8 +71,7 @@ void AInteractable_Radio::Interact(AActor * a_player)
 		return;
 	}
 
-	if (Manager != nullptr)
-		Manager->Notify(Index);
+
 
 	if (this->InteractSound)
 	{
@@ -86,6 +85,9 @@ void AInteractable_Radio::Interact(AActor * a_player)
 	}
 	else
 	{
+		if (Manager != nullptr)
+			Manager->Notify(Index);
+
 		this->Audio->SetSound(this->TurnOnSound);
 		this->Audio->Play(0.0f);
 

@@ -2,6 +2,7 @@
 
 #include "TheDevilInWhiteCity.h"
 #include "SoundTrapManager.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -52,6 +53,13 @@ void ASoundTrapManager::Notify(int32 acIndex)
 		if (!isNotEqual)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SoundTrapSolved"));
+
+			// play success sound
+			if (this->SuccessSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, this->SuccessSound, GetActorLocation());
+			}
+
 			onlySolveTrapOnce = true;
 
 			// show numbers for player
@@ -59,6 +67,15 @@ void ASoundTrapManager::Notify(int32 acIndex)
 
 			// unlock the door for interacting
 			UnlockDoor();
+		}
+		else
+		{
+			// play failure sound
+			UE_LOG(LogTemp, Warning, TEXT("SoundTraFailure"));
+			if (this->FailureSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, this->FailureSound, GetActorLocation());
+			}
 		}
 	}
 

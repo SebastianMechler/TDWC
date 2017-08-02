@@ -42,11 +42,6 @@ void AInteractable_Door::Tick(float DeltaTime)
 	}
 	else
 	{
-		if (this->isOfficeDoor)
-		{
-			this->SetLockState(true);
-		}
-
 		// is being closed
 		FRotator newRotation = FMath::Lerp(this->endVector, this->startVector, this->lerpTime);
 		SetActorRotation(newRotation);
@@ -108,14 +103,7 @@ void AInteractable_Door::Interact(AActor * a_player)
 	}
 	else
 	{
-		// NEW CODE 17.07.2017
-		if (this->GasTrapManager)
-		{
-			AGasTrapManager* manager = reinterpret_cast<AGasTrapManager*>(this->GasTrapManager);
-			manager->Spawn();
-			this->GasTrapManager = nullptr;
-		}
-		// END NEW CODE XD
+
 
 		this->endVector = GetActorRotation();
 
@@ -150,6 +138,17 @@ void AInteractable_Door::OnViewSpace(AActor* a_player)
 
 }
 
+void AInteractable_Door::ShutdownGasTrap()
+{
+	// NEW CODE 17.07.2017
+	if (this->GasTrapManager)
+	{
+		AGasTrapManager* manager = reinterpret_cast<AGasTrapManager*>(this->GasTrapManager);
+		manager->Spawn();
+		this->GasTrapManager = nullptr;
+	}
+	// END NEW CODE XD
+}
 
 void AInteractable_Door::SetLockState(bool a_state)
 {
@@ -167,6 +166,11 @@ void AInteractable_Door::SlamDoor()
 	this->isSlammed = true;
 	this->interacted = false;
 	this->Interact(nullptr);
+}
+
+bool AInteractable_Door::GetOpenState()
+{
+	return this->isOpen;
 }
 
 void AInteractable_Door::SetSlamState(bool a_state)

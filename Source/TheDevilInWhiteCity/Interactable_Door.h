@@ -54,9 +54,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 	bool isLocked = true;
 
-	UPROPERTY(EditAnywhere, Category = "Gameplay")
-		bool isOfficeDoor = false;
-
 	UFUNCTION(BlueprintCallable, Category = "Gameplay")
 	void SetLockState(bool a_state);
 
@@ -65,9 +62,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Gameplay")
 	void SlamDoor();
 
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	bool GetOpenState();
+
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+		void ShutdownGasTrap();
+
 	void SetSlamState(bool a_state);
 
 	// Interface functions
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
 	void Interact(AActor* a_player) override;
 	EInteractionType GetInteractionType() override;
 	void OnViewSpace(AActor* a_player) override;

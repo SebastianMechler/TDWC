@@ -24,6 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(Blueprintcallable, Category ="Gameplay")
 	void Interact(AActor* a_player) override;
 	void OnViewSpace(AActor* a_player) override;
 	EInteractionType GetInteractionType() override;

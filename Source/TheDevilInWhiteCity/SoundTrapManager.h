@@ -30,6 +30,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		AInteractable_Door* Door = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* SuccessSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		USoundBase* FailureSound = nullptr;
+
 	void Notify(int32 acIndex);
 
 private:
