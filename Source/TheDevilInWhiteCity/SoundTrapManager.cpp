@@ -22,8 +22,25 @@ void ASoundTrapManager::Notify(int32 acIndex)
 	//UE_LOG(LogTemp, Warning, TEXT("ACINDEX: %d"),acIndex);
 	//UE_LOG(LogTemp, Warning, TEXT("CURRENT_TRY_INDEX: %d"), CurrentTryIndex);
 
-	if (!CurrentTry.Contains(acIndex))
-		CurrentTry[++CurrentTryIndex] = acIndex;
+	//if (!CurrentTry.Contains(acIndex))
+	CurrentTry[++CurrentTryIndex] = acIndex;
+
+	// check each notification for success
+	bool isSequenceCorrect = true;
+	for (auto i = 0; i < CurrentTryIndex + 1; i++)
+	{
+		if (CurrentTry[i] != ActivationOrder[i])
+		{
+			isSequenceCorrect = false;
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("IS_SEQ_CORRECT: %d"), isSequenceCorrect);
+
+	if (!isSequenceCorrect)
+	{
+		CurrentTryIndex = -1;
+	}
+
 
 	if (CurrentTryIndex == ActivationOrder.Num() - 1)
 	{
