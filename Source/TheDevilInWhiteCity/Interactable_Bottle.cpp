@@ -116,7 +116,7 @@ void AInteractable_Bottle::Interact(AActor* a_player)
 
 EInteractionType AInteractable_Bottle::GetInteractionType()
 {
-	return EInteractionType::View;
+	return EInteractionType::World;
 }
 
 void AInteractable_Bottle::OnViewSpace(AActor* a_player)

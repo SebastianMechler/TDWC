@@ -89,7 +89,6 @@ void ACryptex::BeginPlay()
 void ACryptex::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ACryptex::UpdateCryptex(ECryptexArrowType a_type, int a_index)
@@ -100,6 +99,12 @@ void ACryptex::UpdateCryptex(ECryptexArrowType a_type, int a_index)
 		return;
 	}
 	
+	// dont allow interaction of number pairs after they are solved
+	if (a_index < 2 && Solved01 || a_index >= 2 && Solved23)
+	{
+		return;
+	}
+
 	auto value = this->TextStartValues[a_index];
 
 	switch (a_type)
@@ -148,37 +153,103 @@ void ACryptex::UpdateCryptex(ECryptexArrowType a_type, int a_index)
 
 void ACryptex::TryToSolveCryptex()
 {
-	bool solved = true;
 
-	for (auto i = 0; i < 4; i++)
+	// SOLVED_NUMBERS_0_1
+	bool solved01 = true;
+
+	for (auto i = 0; i < 2; i++)
 	{
 		if (this->TextStartValues[i] != this->TextSolveValues[i])
 		{
-			solved = false;
+			solved01 = false;
 		}
 	}
 
-	if (solved)
+	if (solved01)
 	{
 		// SOLVED YAY
-		for (auto i = 0; i < 4; i++)
+		this->Solved01 = true;
+
+		for (auto i = 0; i < 2; i++)
 		{
 			this->TextNumbers[i]->SetTextRenderColor(FColor::Green);
+		}
+		
+	}	
 
-			if (this->OpenSound)
-			{
-				UGameplayStatics::PlaySoundAtLocation(this, this->OpenSound, GetActorLocation());
-			}
+	// SOLVED_NUMBERS_3_4
+	bool solved23 = true;
 
-			// TODO: call door script...
-			if (DoorToOpen)
-			{
-				DoorToOpen->SetLockState(false);
-			}
+	for (auto i = 2; i < 4; i++)
+	{
+		if (this->TextStartValues[i] != this->TextSolveValues[i])
+		{
+			solved23 = false;
+		}
+	}
 
+	if (solved23)
+	{
+		this->Solved23 = true;
+		// SOLVED YAY
+		for (auto i = 2; i < 4; i++)
+		{
+			this->TextNumbers[i]->SetTextRenderColor(FColor::Green);
 		}
 
+	}
+
+
+	if (solved01 && solved23)
+	{
 		this->IsSolved = true;
-	}	
+
+		if (this->OpenSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->OpenSound, GetActorLocation());
+		}
+
+		// TODO: call door script...
+		if (DoorToOpen)
+		{
+			DoorToOpen->SetLockState(false);
+		}
+	}
 }
 
+
+
+/*
+bool solved = true;
+
+for (auto i = 0; i < 4; i++)
+{
+if (this->TextStartValues[i] != this->TextSolveValues[i])
+{
+solved = false;
+}
+}
+
+if (solved)
+{
+// SOLVED YAY
+for (auto i = 0; i < 4; i++)
+{
+this->TextNumbers[i]->SetTextRenderColor(FColor::Green);
+
+if (this->OpenSound)
+{
+UGameplayStatics::PlaySoundAtLocation(this, this->OpenSound, GetActorLocation());
+}
+
+// TODO: call door script...
+if (DoorToOpen)
+{
+DoorToOpen->SetLockState(false);
+}
+
+}
+
+this->IsSolved = true;
+}
+*/

@@ -40,6 +40,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* DrinkSound = nullptr;
 
+
 private:
 	bool Started = false;
 	FRotator StartRotation;

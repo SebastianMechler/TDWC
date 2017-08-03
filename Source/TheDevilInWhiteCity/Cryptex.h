@@ -67,5 +67,7 @@ public:
 
 private:
 	bool IsSolved = false;
-	
+	bool Solved01 = false;
+	bool Solved23 = false;
 };
+

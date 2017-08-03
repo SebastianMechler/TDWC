@@ -39,6 +39,13 @@ void ASoundTrapManager::Notify(int32 acIndex)
 	if (!isSequenceCorrect)
 	{
 		CurrentTryIndex = -1;
+
+		// play failure sound
+		UE_LOG(LogTemp, Warning, TEXT("SoundTraFailure"));
+		if (this->FailureSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, this->FailureSound, GetActorLocation());
+		}
 	}
 
 
