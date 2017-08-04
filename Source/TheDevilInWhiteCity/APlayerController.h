@@ -71,6 +71,7 @@ private:
 	float CurrentMovement = 0.0f;
 	int32_t CurrentFootstepIndex = 0;
 	FVector LastFramePosition = FVector(0.0f, 0.0f, 0.0f);
+	int lastIdx = -1;
 };
 
 

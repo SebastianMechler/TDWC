@@ -44,7 +44,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 		USoundBase* TurnOnSound = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		AActor* MusicBoxHandle = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+		float MusicBoxRotationSpeed = 50.0f;
 private:
 	UAudioComponent* Audio = nullptr;
 	float Duration = 0.0f;

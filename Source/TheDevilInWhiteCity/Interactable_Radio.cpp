@@ -45,23 +45,38 @@ void AInteractable_Radio::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!this->Audio || !this->LoopSound)
+	if (!this->Audio) //|| !this->LoopSound)
 	{
 		return;
 	}
 
-	if (this->IsTurnedOn)
+	// rotate music box handle
+	if (this->MusicBoxHandle && this->Audio->IsPlaying())
 	{
-		this->Timer -= DeltaTime;
+		auto rot = this->MusicBoxHandle->GetActorRotation();
 
-		if (this->Timer <= 0.0f)
-		{
-			this->IsTurnedOn = false;
+		float step = DeltaTime * this->MusicBoxRotationSpeed;
 
-			this->Audio->SetSound(this->LoopSound);
-			this->Audio->Play(0.0f);
-		}
+		rot.Roll += step;
+
+		this->MusicBoxHandle->SetActorRotation(rot);
 	}
+
+
+	//if (this->IsTurnedOn)
+	//{
+
+
+	//	this->Timer -= DeltaTime;
+
+	//	if (this->Timer <= 0.0f)
+	//	{
+	//		this->IsTurnedOn = false;
+
+	//		this->Audio->SetSound(this->LoopSound);
+	//		this->Audio->Play(0.0f);
+	//	}
+	//}
 }
 
 void AInteractable_Radio::Interact(AActor * a_player)

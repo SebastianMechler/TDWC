@@ -78,4 +78,6 @@ public:
 
 	bool isSlammed = false;
 
+
+	float soundDelay = 0.0f;
 };

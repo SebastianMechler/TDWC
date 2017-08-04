@@ -182,7 +182,15 @@ void AAPlayerController::HandleFootstep(float a_deltaTime)
 		}
 
 		// get random sound from array
-		auto idx = FMath::RandRange(0, FootstepMap.Num()-1); // 0-MAX-1 in array
+		
+		auto idx = lastIdx;// FMath::RandRange(0, FootstepMap.Num() - 1); // 0-MAX-1 in array
+
+		do
+		{
+			idx = FMath::RandRange(0, FootstepMap.Num() - 1); // 0-MAX-1 in array
+		} while (idx == lastIdx);
+
+		lastIdx = idx;
 
 		// Debugging
 		//char text[100]{};

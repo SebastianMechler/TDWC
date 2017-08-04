@@ -26,6 +26,12 @@ void AInteractable_Door::BeginPlay()
 void AInteractable_Door::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (this->soundDelay > 0.0f)
+	{
+		this->soundDelay -= DeltaTime;
+	}
+
 	if (!interacted)
 	{
 		return;
@@ -65,7 +71,11 @@ void AInteractable_Door::Interact(AActor * a_player)
 		// TODO: error sound locked
 		if (this->LockedDoorSound)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, this->LockedDoorSound, GetActorLocation());
+			if (this->soundDelay <= 0.0f)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, this->LockedDoorSound, GetActorLocation());
+				this->soundDelay = this->LockedDoorSound->Duration;
+			}
 		}
 		return;
 	}
